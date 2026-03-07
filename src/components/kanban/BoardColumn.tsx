@@ -87,8 +87,8 @@ const BoardColumn = ({
         <div
             className={`
                 flex flex-col w-72 shrink-0 rounded-xl transition-all duration-200
-                bg-white/70 backdrop-blur-sm shadow-sm
-                ${isDragOver ? 'ring-2 ring-white/50 shadow-lg scale-[1.01]' : ''}
+                bg-theme-gray-100/95 backdrop-blur-md shadow-md
+                ${isDragOver ? 'ring-2 ring-theme-primary/50 shadow-lg scale-[1.01]' : ''}
             `}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}

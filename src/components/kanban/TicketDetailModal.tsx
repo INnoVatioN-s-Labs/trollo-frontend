@@ -101,7 +101,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0 gap-0 bg-white">
+            <DialogContent className="sm:max-w-[800px] w-[95vw] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-white">
                 {/* 헤더 */}
                 <DialogHeader className="p-6 pb-4">
                     <div className="flex items-start gap-3">
@@ -120,7 +120,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                     </div>
                 </DialogHeader>
 
-                <div className="flex px-6 pb-6 gap-6">
+                <div className="flex flex-col md:flex-row px-6 pb-6 gap-6 md:gap-8">
                     {/* 좌측: 메인 콘텐츠 */}
                     <div className="flex-1 min-w-0 space-y-6">
                         {/* 메타 정보 (MEMBERS / LABELS / DUE DATE) */}
@@ -374,7 +374,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                     </div>
 
                     {/* 우측: 사이드 패널 */}
-                    <div className="w-44 shrink-0 space-y-4">
+                    <div className="w-full md:w-48 shrink-0 space-y-4">
                         {/* ADD TO CARD */}
                         <div>
                             <p className="uppercase tracking-wider text-[10px] text-theme-gray-500 font-semibold mb-2">

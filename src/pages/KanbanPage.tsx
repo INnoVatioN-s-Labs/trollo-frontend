@@ -277,7 +277,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
             </header>
 
             {/* 보드 서브 헤더 */}
-            <div className="h-12 px-4 flex items-center gap-3 bg-board-bg-from/80 backdrop-blur-sm shrink-0">
+            <div className="h-12 px-4 flex items-center gap-3 bg-theme-dark/30 backdrop-blur-md shrink-0">
                 <Button
                     variant="ghost"
                     size="sm"
@@ -350,7 +350,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     {/* 새 보드 추가 */}
                     <button
                         onClick={() => setIsAddBoardDialogOpen(true)}
-                        className="w-72 shrink-0 rounded-xl bg-white/20 hover:bg-white/30 transition-all duration-200 flex items-center justify-center text-white/80 hover:text-white cursor-pointer"
+                        className="w-72 shrink-0 rounded-xl bg-theme-dark/15 hover:bg-theme-dark/25 transition-all duration-200 flex items-center justify-center text-white/90 hover:text-white cursor-pointer shadow-sm"
                     >
                         <div className="flex items-center gap-2 font-medium text-sm">
                             <Plus className="w-5 h-5" />

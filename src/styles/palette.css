@@ -1,25 +1,25 @@
 @theme inline {
-    /* Color Hunt 테마 브랜드 색상 */
-    --color-theme-primary: #f57799; /* 팝한 메인 핑크 (버튼 및 강조) */
-    --color-theme-primary-light: #fff7cd; /* 부드러운 크림 (배경 및 Hover) */
-    --color-theme-dark: #4a3b39; /* 따뜻한 다크 브라운 (텍스트) */
-    --color-theme-dark-light: #6b5a58; /* 서브 텍스트 / 네비 바 */
+    /* Sunset & Ink 테마 브랜드 색상 */
+    --color-theme-primary: #e85d04; /* cayenne_red-500: 메인 버튼 및 강조 */
+    --color-theme-primary-light: #feddc9; /* cayenne_red-900: 부드러운 호버 표면 */
+    --color-theme-dark: #1f0001; /* oxblood-100: 네비게이션 바, 굵은 텍스트 */
+    --color-theme-dark-light: #57030b; /* black_cherry-400: 본문 서브 텍스트 */
 
-    /* 따뜻한 웜 그레이 스케일 */
-    --color-theme-gray-500: #a89f9e;
-    --color-theme-gray-300: #d9d4d4;
-    --color-theme-gray-100: #fdfaf9;
+    /* 웜톤 그레이 스케일 (가독성 높은 뉴트럴 톤) */
+    --color-theme-gray-500: #85706e; /* 텍스트, 플레이스홀더, 비어있는 화면 아이콘 */
+    --color-theme-gray-300: #dcd4d4; /* 보더 라인 */
+    --color-theme-gray-100: #f8f6f6; /* 환한 오프화이트 베이스 (카드 및 컬럼 배경) */
 
-    /* 칸반 티켓 라벨 색상 (새로운 파스텔/웜톤 분위기에 어우러지는 채도로 변경) */
-    --color-label-blue: #62b1f6;
+    /* 칸반 티켓 라벨 색상 */
+    --color-label-blue: #5068ee; /* ink_black */
     --color-label-green: #68c991;
-    --color-label-orange: #faa356;
-    --color-label-red: #fb6a75;
-    --color-label-purple: #a97ef6;
-    --color-label-yellow: #fcd742;
+    --color-label-orange: #faa307; /* orange */
+    --color-label-red: #d00000; /* brick_ember */
+    --color-label-purple: #880f39; /* night_bordeaux */
+    --color-label-yellow: #ffba08; /* amber_flame */
 
-    /* 메인 보드 배경 그래디언트 색상 (3단 컬러 활용) */
-    --color-board-bg-from: #f57799; /* Pink */
-    --color-board-bg-via: #fb9b8f; /* Coral */
-    --color-board-bg-to: #fdc3a1; /* Peach */
+    /* 메인 보드 배경 그래디언트 색상 (Sunset 느낌 3단 연결) */
+    --color-board-bg-from: #6a040f; /* black_cherry-500 */
+    --color-board-bg-via: #dc2f02; /* red_ochre-500 */
+    --color-board-bg-to: #faa307; /* orange-500 */
 }
