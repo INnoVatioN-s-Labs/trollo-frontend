@@ -46,7 +46,9 @@
         "name_placeholder": "워크스페이스 이름",
         "desc_placeholder": "설명 (선택사항)",
         "cancel": "취소",
-        "create": "생성"
+        "create": "생성",
+        "delete_tooltip": "워크스페이스 삭제",
+        "delete_confirm": "정말 이 워크스페이스를 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다!)"
     },
     "kanban": {
         "add_list": "리스트 추가",

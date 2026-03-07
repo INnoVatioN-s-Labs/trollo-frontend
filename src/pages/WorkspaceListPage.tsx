@@ -12,7 +12,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { getWorkspaces, createWorkspace } from '@/api/workspace';
+import { getWorkspaces, createWorkspace, deleteWorkspace } from '@/api/workspace';
 import type { User, Workspace } from '@/types';
 import {
     Search,
@@ -29,6 +29,7 @@ import {
     Pencil,
     UserPlus,
     CheckCircle,
+    Trash2,
 } from 'lucide-react';
 
 interface WorkspaceListPageProps {
@@ -123,6 +124,20 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
         } catch (error) {
             console.error('Failed to create workspace:', error);
             alert('워크스페이스 생성에 실패했습니다.');
+        }
+    };
+
+    const handleDeleteWorkspace = async (e: React.MouseEvent, workspaceId: number) => {
+        e.stopPropagation(); // 카드 클릭 이벤트(이동) 방지
+        const confirmDelete = window.confirm(t('workspace.delete_confirm'));
+        if (!confirmDelete) return;
+
+        try {
+            await deleteWorkspace(workspaceId);
+            await fetchWorkspaces(); // 삭제 후 목록 리로딩
+        } catch (error) {
+            console.error('Failed to delete workspace:', error);
+            alert('워크스페이스 삭제 기능 중 오류가 발생했습니다.');
         }
     };
 
@@ -323,8 +338,18 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                                         </div>
                                     </div>
 
-                                    <h3 className="font-semibold text-theme-dark text-base mb-1">{ws.name}</h3>
-                                    <p className="text-xs text-theme-gray-500 line-clamp-2 mb-4 leading-relaxed">
+                                    <div className="flex items-start justify-between mb-1 gap-2">
+                                        <h3 className="font-semibold text-theme-dark text-base">{ws.name}</h3>
+                                        {/* 삭제 버튼 */}
+                                        <button
+                                            onClick={(e) => handleDeleteWorkspace(e, ws.id)}
+                                            className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-red-50 text-theme-gray-300 hover:text-red-500 transition-colors"
+                                            title={t('workspace.delete_tooltip')}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-theme-gray-500 line-clamp-2 mb-4 leading-relaxed mt-1">
                                         {ws.description}
                                     </p>
 

@@ -24,3 +24,8 @@ export const getWorkspaceById = async (workspaceId: number): Promise<Workspace> 
     const response = await apiClient.get<ReturnMessage<Workspace>>(`/workspaces/${workspaceId}`);
     return response.data.data;
 };
+
+/** 워크스페이스 삭제 */
+export const deleteWorkspace = async (workspaceId: number): Promise<void> => {
+    await apiClient.delete(`/workspaces/${workspaceId}`);
+};
