@@ -21,7 +21,7 @@ const App = () => {
         return (
             <div className="h-screen flex items-center justify-center bg-background">
                 <div className="flex flex-col items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-trollo-orange flex items-center justify-center animate-pulse">
+                    <div className="w-10 h-10 rounded-lg bg-theme-primary flex items-center justify-center animate-pulse">
                         <span className="text-white font-bold text-lg">T</span>
                     </div>
                     <p className="text-sm text-muted-foreground">로딩 중...</p>

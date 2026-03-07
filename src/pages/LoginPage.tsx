@@ -60,13 +60,13 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-50/50 via-white to-orange-50/30">
-            {/* 메인 콘텐츠 */}
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-theme-primary-light/50 via-white to-theme-primary-light/30">
+            {/* 상단 로고 (선택적) */}
             <div className="flex-1 flex items-center justify-center p-4">
                 <Card className="w-full max-w-md shadow-xl border-0 bg-white">
                     <CardHeader className="text-center space-y-4 pt-10 pb-2">
                         {/* 로고 */}
-                        <div className="mx-auto w-14 h-14 rounded-xl bg-trollo-orange flex items-center justify-center shadow-lg shadow-trollo-orange/20">
+                        <div className="mx-auto w-14 h-14 rounded-xl bg-theme-primary flex items-center justify-center shadow-lg shadow-theme-primary/20">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                                 <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white" />
                                 <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" />
@@ -77,8 +77,8 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-trollo-navy tracking-tight">Trollo Login</h1>
-                            <p className="text-sm text-trollo-gray-500 mt-1">
+                            <h1 className="text-2xl font-bold text-theme-dark tracking-tight">Trollo Login</h1>
+                            <p className="text-sm text-theme-gray-500 mt-1">
                                 Welcome back! Manage your team tasks effectively.
                             </p>
                         </div>
@@ -97,9 +97,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             <div className="space-y-2">
                                 <Label
                                     htmlFor="email"
-                                    className="flex items-center gap-1.5 text-sm font-medium text-trollo-navy"
+                                    className="flex items-center gap-1.5 text-sm font-medium text-theme-dark"
                                 >
-                                    <Mail className="w-4 h-4 text-trollo-gray-500" />
+                                    <Mail className="w-4 h-4 text-theme-gray-500" />
                                     Email Address
                                 </Label>
                                 <Input
@@ -108,7 +108,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                     placeholder="name@company.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="h-12 border-trollo-gray-300 focus:border-trollo-orange focus:ring-trollo-orange/20"
+                                    className="h-12 border-theme-gray-300 focus:border-theme-primary focus:ring-theme-primary/20"
                                 />
                             </div>
 
@@ -117,14 +117,14 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                 <div className="flex items-center justify-between">
                                     <Label
                                         htmlFor="password"
-                                        className="flex items-center gap-1.5 text-sm font-medium text-trollo-navy"
+                                        className="flex items-center gap-1.5 text-sm font-medium text-theme-dark"
                                     >
-                                        <Lock className="w-4 h-4 text-trollo-gray-500" />
+                                        <Lock className="w-4 h-4 text-theme-gray-500" />
                                         Password
                                     </Label>
                                     <button
                                         type="button"
-                                        className="text-xs text-trollo-orange hover:underline font-medium"
+                                        className="text-xs text-theme-primary hover:underline font-medium"
                                     >
                                         Forgot password?
                                     </button>
@@ -135,7 +135,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="h-12 border-trollo-gray-300 focus:border-trollo-orange focus:ring-trollo-orange/20"
+                                    className="h-12 border-theme-gray-300 focus:border-theme-primary focus:ring-theme-primary/20"
                                 />
                             </div>
 
@@ -144,9 +144,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                 <input
                                     type="checkbox"
                                     id="keepLoggedIn"
-                                    className="w-4 h-4 rounded border-trollo-gray-300 text-trollo-orange focus:ring-trollo-orange/20 accent-trollo-orange"
+                                    className="w-4 h-4 rounded border-theme-gray-300 text-theme-primary focus:ring-theme-primary/20 accent-theme-primary"
                                 />
-                                <label htmlFor="keepLoggedIn" className="text-sm text-trollo-gray-500">
+                                <label htmlFor="keepLoggedIn" className="text-sm text-theme-gray-500">
                                     Keep me logged in
                                 </label>
                             </div>
@@ -155,7 +155,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full h-12 bg-trollo-orange hover:bg-trollo-orange/90 text-white font-semibold text-base rounded-lg shadow-md shadow-trollo-orange/20 transition-all"
+                                className="w-full h-12 bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-base rounded-lg shadow-md shadow-theme-primary/20 transition-all"
                             >
                                 {isSubmitting ? (
                                     '로그인 중...'
@@ -170,8 +170,8 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
                         {/* 구분선 */}
                         <div className="relative my-6">
-                            <Separator className="bg-trollo-gray-100" />
-                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-xs text-trollo-gray-500 uppercase tracking-widest">
+                            <Separator className="bg-theme-gray-100" />
+                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-xs text-theme-gray-500 uppercase tracking-widest">
                                 or continue with
                             </span>
                         </div>
@@ -181,7 +181,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             <Button
                                 variant="outline"
                                 type="button"
-                                className="h-11 border-trollo-gray-300 text-trollo-navy hover:bg-trollo-gray-100/50"
+                                className="h-11 border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100/50"
                             >
                                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                                     <path
@@ -206,7 +206,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             <Button
                                 variant="outline"
                                 type="button"
-                                className="h-11 border-trollo-gray-300 text-trollo-navy hover:bg-trollo-gray-100/50"
+                                className="h-11 border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100/50"
                             >
                                 <Github className="w-4 h-4 mr-2" />
                                 GitHub
@@ -215,9 +215,9 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                     </CardContent>
 
                     <CardFooter className="justify-center pb-8 pt-4">
-                        <p className="text-sm text-trollo-gray-500">
+                        <p className="text-sm text-theme-gray-500">
                             Don't have an account?{' '}
-                            <Link to="/signup" className="text-trollo-orange font-semibold hover:underline">
+                            <Link to="/signup" className="text-theme-primary font-semibold hover:underline">
                                 Create an account
                             </Link>
                         </p>
@@ -227,12 +227,12 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
             {/* 하단 풋터 */}
             <footer className="py-6 text-center space-y-2">
-                <div className="flex items-center justify-center gap-6 text-sm text-trollo-gray-500">
-                    <button className="hover:text-trollo-navy transition-colors">Terms of Service</button>
-                    <button className="hover:text-trollo-navy transition-colors">Privacy Policy</button>
-                    <button className="hover:text-trollo-navy transition-colors">Help Center</button>
+                <div className="flex items-center justify-center gap-6 text-sm text-theme-gray-500">
+                    <button className="hover:text-theme-dark transition-colors">Terms of Service</button>
+                    <button className="hover:text-theme-dark transition-colors">Privacy Policy</button>
+                    <button className="hover:text-theme-dark transition-colors">Help Center</button>
                 </div>
-                <p className="text-xs text-trollo-gray-300">© 2024 Trollo Productivity Inc. All rights reserved.</p>
+                <p className="text-xs text-theme-gray-300">© 2024 Trollo Productivity Inc. All rights reserved.</p>
             </footer>
         </div>
     );

@@ -95,13 +95,13 @@ const BoardColumn = ({
             {/* 보드 헤더 */}
             <div className="p-3 pb-2">
                 <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-sm text-trollo-navy tracking-tight">{board.name}</h3>
+                    <h3 className="font-semibold text-sm text-theme-dark tracking-tight">{board.name}</h3>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-7 w-7 text-trollo-gray-500 hover:text-trollo-navy"
+                                className="h-7 w-7 text-theme-gray-500 hover:text-theme-dark"
                             >
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
@@ -126,7 +126,7 @@ const BoardColumn = ({
                         <div key={ticket.id}>
                             {/* 드롭 영역 (티켓 사이) */}
                             <div
-                                className="h-1 rounded transition-all duration-150 hover:h-8 hover:bg-trollo-orange/10 hover:border hover:border-dashed hover:border-trollo-orange/30"
+                                className="h-1 rounded transition-all duration-150 hover:h-8 hover:bg-theme-primary/10 hover:border hover:border-dashed hover:border-theme-primary/30"
                                 onDragOver={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -144,7 +144,7 @@ const BoardColumn = ({
 
                     {/* 빈 보드일 때 드롭 안내 */}
                     {sortedTickets.length === 0 && (
-                        <div className="py-8 text-center text-xs text-trollo-gray-500/60">
+                        <div className="py-8 text-center text-xs text-theme-gray-500/60">
                             <p>티켓이 없습니다</p>
                             <p className="mt-1">여기에 드래그하거나 추가하세요</p>
                         </div>
@@ -168,20 +168,20 @@ const BoardColumn = ({
                                 if (e.key === 'Escape') setIsAddingTicket(false);
                             }}
                             autoFocus
-                            className="h-8 text-sm border-trollo-gray-300 focus:border-trollo-orange"
+                            className="h-8 text-sm border-theme-gray-300 focus:border-theme-primary"
                         />
                         <Textarea
                             placeholder="설명 (선택사항)"
                             value={newTicketDesc}
                             onChange={(e) => setNewTicketDesc(e.target.value)}
-                            className="text-sm min-h-[60px] resize-none border-trollo-gray-300 focus:border-trollo-orange"
+                            className="text-sm min-h-[60px] resize-none border-theme-gray-300 focus:border-theme-primary"
                             rows={2}
                         />
                         <div className="flex gap-2">
                             <Button
                                 size="sm"
                                 onClick={handleAddTicket}
-                                className="flex-1 h-7 text-xs bg-trollo-orange hover:bg-trollo-orange/90 text-white"
+                                className="flex-1 h-7 text-xs bg-theme-primary hover:bg-theme-primary/90 text-white"
                             >
                                 추가
                             </Button>
@@ -202,7 +202,7 @@ const BoardColumn = ({
                 ) : (
                     <Button
                         variant="ghost"
-                        className="w-full h-8 text-xs text-trollo-gray-500 hover:text-trollo-navy justify-start"
+                        className="w-full h-8 text-xs text-theme-gray-500 hover:text-theme-dark justify-start"
                         onClick={() => setIsAddingTicket(true)}
                     >
                         <Plus className="h-3.5 w-3.5 mr-1" />

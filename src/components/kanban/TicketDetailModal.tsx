@@ -103,15 +103,15 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                 {/* 헤더 */}
                 <DialogHeader className="p-6 pb-4">
                     <div className="flex items-start gap-3">
-                        <div className="w-7 h-7 rounded bg-trollo-navy flex items-center justify-center mt-0.5 shrink-0">
+                        <div className="w-7 h-7 rounded bg-theme-dark flex items-center justify-center mt-0.5 shrink-0">
                             <FileText className="w-4 h-4 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <DialogTitle className="text-xl font-bold text-trollo-navy leading-tight">
+                            <DialogTitle className="text-xl font-bold text-theme-dark leading-tight">
                                 {ticket.title}
                             </DialogTitle>
-                            <p className="text-sm text-trollo-gray-500 mt-1">
-                                in list <span className="text-trollo-navy underline cursor-pointer">{boardName}</span>
+                            <p className="text-sm text-theme-gray-500 mt-1">
+                                in list <span className="text-theme-dark underline cursor-pointer">{boardName}</span>
                             </p>
                         </div>
                     </div>
@@ -124,20 +124,20 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                         <div className="flex flex-wrap gap-8 text-xs">
                             {/* Members */}
                             <div>
-                                <p className="uppercase tracking-wider text-trollo-gray-500 font-semibold mb-2">
+                                <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
                                     Members
                                 </p>
                                 <div className="flex items-center gap-1">
                                     {members.map((m) => (
                                         <div
                                             key={m.id}
-                                            className="w-8 h-8 rounded-full bg-trollo-gray-300 flex items-center justify-center text-xs font-bold text-white"
+                                            className="w-8 h-8 rounded-full bg-theme-gray-300 flex items-center justify-center text-xs font-bold text-white"
                                             title={m.nickname}
                                         >
                                             {m.nickname.charAt(0)}
                                         </div>
                                     ))}
-                                    <button className="w-8 h-8 rounded-full border-2 border-dashed border-trollo-gray-300 flex items-center justify-center text-trollo-gray-500 hover:border-trollo-orange hover:text-trollo-orange transition-colors">
+                                    <button className="w-8 h-8 rounded-full border-2 border-dashed border-theme-gray-300 flex items-center justify-center text-theme-gray-500 hover:border-theme-primary hover:text-theme-primary transition-colors">
                                         <Plus className="w-3.5 h-3.5" />
                                     </button>
                                 </div>
@@ -145,7 +145,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
 
                             {/* Labels */}
                             <div>
-                                <p className="uppercase tracking-wider text-trollo-gray-500 font-semibold mb-2">
+                                <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
                                     Labels
                                 </p>
                                 <div className="flex items-center gap-1.5">
@@ -158,7 +158,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                             {label.name}
                                         </Badge>
                                     ))}
-                                    <button className="w-7 h-7 rounded border-2 border-dashed border-trollo-gray-300 flex items-center justify-center text-trollo-gray-500 hover:border-trollo-orange hover:text-trollo-orange transition-colors">
+                                    <button className="w-7 h-7 rounded border-2 border-dashed border-theme-gray-300 flex items-center justify-center text-theme-gray-500 hover:border-theme-primary hover:text-theme-primary transition-colors">
                                         <Plus className="w-3 h-3" />
                                     </button>
                                 </div>
@@ -166,13 +166,13 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
 
                             {/* Due Date */}
                             <div>
-                                <p className="uppercase tracking-wider text-trollo-gray-500 font-semibold mb-2">
+                                <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
                                     Due Date
                                 </p>
                                 <div className="flex items-center gap-2">
-                                    <Clock className={`w-4 h-4 ${isLate ? 'text-red-500' : 'text-trollo-gray-500'}`} />
+                                    <Clock className={`w-4 h-4 ${isLate ? 'text-red-500' : 'text-theme-gray-500'}`} />
                                     <span
-                                        className={`text-sm font-medium ${isLate ? 'text-red-500' : 'text-trollo-navy'}`}
+                                        className={`text-sm font-medium ${isLate ? 'text-red-500' : 'text-theme-dark'}`}
                                     >
                                         {new Date(dueDate).toLocaleDateString('en-US', {
                                             month: 'short',
@@ -194,20 +194,20 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             </div>
                         </div>
 
-                        <Separator className="bg-trollo-gray-100" />
+                        <Separator className="bg-theme-gray-100" />
 
                         {/* Description */}
                         <div>
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
-                                    <AlignLeft className="w-4.5 h-4.5 text-trollo-navy" />
-                                    <h3 className="font-bold text-trollo-navy">Description</h3>
+                                    <AlignLeft className="w-4.5 h-4.5 text-theme-dark" />
+                                    <h3 className="font-bold text-theme-dark">Description</h3>
                                 </div>
                                 {!isEditingDesc && (
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="h-7 text-xs border-trollo-gray-300"
+                                        className="h-7 text-xs border-theme-gray-300"
                                         onClick={() => setIsEditingDesc(true)}
                                     >
                                         Edit
@@ -220,13 +220,13 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
                                         placeholder="Add a more detailed description..."
-                                        className="min-h-[100px] border-trollo-gray-300 focus:border-trollo-orange"
+                                        className="min-h-[100px] border-theme-gray-300 focus:border-theme-primary"
                                         autoFocus
                                     />
                                     <div className="flex gap-2">
                                         <Button
                                             size="sm"
-                                            className="bg-trollo-orange hover:bg-trollo-orange/90 text-white h-8 text-xs"
+                                            className="bg-theme-primary hover:bg-theme-primary/90 text-white h-8 text-xs"
                                             onClick={handleSaveDescription}
                                         >
                                             Save
@@ -243,7 +243,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                 </div>
                             ) : (
                                 <div
-                                    className="bg-trollo-gray-100/50 rounded-lg p-4 text-sm text-trollo-gray-500 cursor-pointer hover:bg-trollo-gray-100 transition-colors min-h-[80px]"
+                                    className="bg-theme-gray-100/50 rounded-lg p-4 text-sm text-theme-gray-500 cursor-pointer hover:bg-theme-gray-100 transition-colors min-h-[80px]"
                                     onClick={() => setIsEditingDesc(true)}
                                 >
                                     {description || 'Add a more detailed description...'}
@@ -256,20 +256,20 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             <div>
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
-                                        <CheckSquare className="w-4.5 h-4.5 text-trollo-navy" />
-                                        <h3 className="font-bold text-trollo-navy">Checklist</h3>
+                                        <CheckSquare className="w-4.5 h-4.5 text-theme-dark" />
+                                        <h3 className="font-bold text-theme-dark">Checklist</h3>
                                     </div>
-                                    <Button variant="outline" size="sm" className="h-7 text-xs border-trollo-gray-300">
+                                    <Button variant="outline" size="sm" className="h-7 text-xs border-theme-gray-300">
                                         Delete
                                     </Button>
                                 </div>
 
                                 {/* 진행률 바 */}
                                 <div className="flex items-center gap-3 mb-3">
-                                    <span className="text-xs text-trollo-gray-500 w-8">{checkProgress}%</span>
-                                    <div className="flex-1 h-2 bg-trollo-gray-100 rounded-full overflow-hidden">
+                                    <span className="text-xs text-theme-gray-500 w-8">{checkProgress}%</span>
+                                    <div className="flex-1 h-2 bg-theme-gray-100 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-trollo-orange rounded-full transition-all duration-300"
+                                            className="h-full bg-theme-primary rounded-full transition-all duration-300"
                                             style={{ width: `${checkProgress}%` }}
                                         />
                                     </div>
@@ -280,16 +280,16 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     {checklist.map((item) => (
                                         <label
                                             key={item.id}
-                                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-trollo-gray-100/50 cursor-pointer transition-colors"
+                                            className="flex items-center gap-3 p-2 rounded-lg hover:bg-theme-gray-100/50 cursor-pointer transition-colors"
                                         >
                                             <input
                                                 type="checkbox"
                                                 checked={item.checked}
                                                 onChange={() => handleToggleCheckItem(item.id)}
-                                                className="w-4 h-4 rounded border-trollo-gray-300 accent-trollo-orange"
+                                                className="w-4 h-4 rounded border-theme-gray-300 accent-theme-primary"
                                             />
                                             <span
-                                                className={`text-sm ${item.checked ? 'line-through text-trollo-gray-300' : 'text-trollo-navy'}`}
+                                                className={`text-sm ${item.checked ? 'line-through text-theme-gray-300' : 'text-theme-dark'}`}
                                             >
                                                 {item.text}
                                             </span>
@@ -297,49 +297,49 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     ))}
                                 </div>
 
-                                <button className="mt-2 text-xs text-trollo-gray-500 hover:text-trollo-orange transition-colors font-medium">
+                                <button className="mt-2 text-xs text-theme-gray-500 hover:text-theme-primary transition-colors font-medium">
                                     + Add an item
                                 </button>
                             </div>
                         )}
 
-                        <Separator className="bg-trollo-gray-100" />
+                        <Separator className="bg-theme-gray-100" />
 
                         {/* Comments and Activity */}
                         <div>
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
-                                    <MessageSquare className="w-4.5 h-4.5 text-trollo-navy" />
-                                    <h3 className="font-bold text-trollo-navy">Comments and activity</h3>
+                                    <MessageSquare className="w-4.5 h-4.5 text-theme-dark" />
+                                    <h3 className="font-bold text-theme-dark">Comments and activity</h3>
                                 </div>
-                                <Button variant="outline" size="sm" className="h-7 text-xs border-trollo-gray-300">
+                                <Button variant="outline" size="sm" className="h-7 text-xs border-theme-gray-300">
                                     Show details
                                 </Button>
                             </div>
 
                             {/* 댓글 작성 */}
                             <div className="flex gap-3 mb-5">
-                                <div className="w-8 h-8 rounded-full bg-trollo-gray-300 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-theme-gray-300 flex items-center justify-center text-xs font-bold text-white shrink-0">
                                     Me
                                 </div>
-                                <div className="flex-1 border border-trollo-gray-100 rounded-lg overflow-hidden focus-within:border-trollo-orange transition-colors">
+                                <div className="flex-1 border border-theme-gray-100 rounded-lg overflow-hidden focus-within:border-theme-primary transition-colors">
                                     <Textarea
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
                                         placeholder="Write a comment..."
                                         className="border-0 focus-visible:ring-0 min-h-[60px] resize-none text-sm"
                                     />
-                                    <div className="flex items-center justify-between px-3 py-2 bg-trollo-gray-100/30">
+                                    <div className="flex items-center justify-between px-3 py-2 bg-theme-gray-100/30">
                                         <div className="flex gap-2">
-                                            <button className="text-trollo-gray-500 hover:text-trollo-navy">
+                                            <button className="text-theme-gray-500 hover:text-theme-dark">
                                                 <Paperclip className="w-4 h-4" />
                                             </button>
-                                            <button className="text-trollo-gray-500 hover:text-trollo-navy">@</button>
-                                            <button className="text-trollo-gray-500 hover:text-trollo-navy">😊</button>
+                                            <button className="text-theme-gray-500 hover:text-theme-dark">@</button>
+                                            <button className="text-theme-gray-500 hover:text-theme-dark">😊</button>
                                         </div>
                                         <Button
                                             size="sm"
-                                            className="bg-trollo-orange hover:bg-trollo-orange/90 text-white h-7 text-xs px-4"
+                                            className="bg-theme-primary hover:bg-theme-primary/90 text-white h-7 text-xs px-4"
                                             disabled={!comment.trim()}
                                         >
                                             Save
@@ -352,17 +352,17 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             <div className="space-y-4">
                                 {activities.map((activity) => (
                                     <div key={activity.id} className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-trollo-gray-300 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                                        <div className="w-8 h-8 rounded-full bg-theme-gray-300 flex items-center justify-center text-xs font-bold text-white shrink-0">
                                             {activity.user.nickname.charAt(0)}
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold text-trollo-navy">
+                                                <span className="font-semibold text-theme-dark">
                                                     {activity.user.nickname}
                                                 </span>{' '}
                                                 {activity.action}
                                             </p>
-                                            <p className="text-xs text-trollo-gray-500 mt-0.5">{activity.timestamp}</p>
+                                            <p className="text-xs text-theme-gray-500 mt-0.5">{activity.timestamp}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -374,7 +374,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                     <div className="w-44 shrink-0 space-y-4">
                         {/* ADD TO CARD */}
                         <div>
-                            <p className="uppercase tracking-wider text-[10px] text-trollo-gray-500 font-semibold mb-2">
+                            <p className="uppercase tracking-wider text-[10px] text-theme-gray-500 font-semibold mb-2">
                                 Add to Card
                             </p>
                             <div className="space-y-1.5">
@@ -388,7 +388,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
 
                         {/* ACTIONS */}
                         <div>
-                            <p className="uppercase tracking-wider text-[10px] text-trollo-gray-500 font-semibold mb-2">
+                            <p className="uppercase tracking-wider text-[10px] text-theme-gray-500 font-semibold mb-2">
                                 Actions
                             </p>
                             <div className="space-y-1.5">
@@ -401,24 +401,24 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                         </div>
 
                         {/* Share 버튼 */}
-                        <Button className="w-full bg-trollo-orange hover:bg-trollo-orange/90 text-white font-semibold text-sm h-9">
+                        <Button className="w-full bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-sm h-9">
                             <Share2 className="w-4 h-4 mr-1.5" />
                             Share
                         </Button>
 
                         {/* Watching */}
-                        <div className="bg-trollo-orange-light rounded-lg p-3 text-center">
+                        <div className="bg-theme-primary-light rounded-lg p-3 text-center">
                             <div className="flex items-center justify-center gap-1.5 mb-1">
-                                <Eye className="w-4 h-4 text-trollo-orange" />
-                                <span className="text-xs font-bold text-trollo-orange uppercase">Watching</span>
+                                <Eye className="w-4 h-4 text-theme-primary" />
+                                <span className="text-xs font-bold text-theme-primary uppercase">Watching</span>
                             </div>
-                            <p className="text-[10px] text-trollo-gray-500 mb-2 leading-relaxed">
+                            <p className="text-[10px] text-theme-gray-500 mb-2 leading-relaxed">
                                 You will receive notifications for all activity on this card.
                             </p>
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className="text-xs h-7 w-full border-trollo-orange text-trollo-orange hover:bg-trollo-orange hover:text-white"
+                                className="text-xs h-7 w-full border-theme-primary text-theme-primary hover:bg-theme-primary hover:text-white"
                             >
                                 Stop Watching
                             </Button>
@@ -432,8 +432,8 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
 
 /** 사이드 패널 버튼 */
 const SideButton = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
-    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md bg-trollo-gray-100/70 hover:bg-trollo-gray-100 text-sm text-trollo-navy font-medium transition-colors text-left">
-        <span className="text-trollo-gray-500">{icon}</span>
+    <button className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md bg-theme-gray-100/70 hover:bg-theme-gray-100 text-sm text-theme-dark font-medium transition-colors text-left">
+        <span className="text-theme-gray-500">{icon}</span>
         {label}
     </button>
 );

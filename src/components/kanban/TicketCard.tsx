@@ -55,14 +55,14 @@ const TicketCard = ({ ticket, onDelete, onEdit, onDragStart }: TicketCardProps) 
 
                 {/* 제목 + 메뉴 */}
                 <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm text-trollo-navy font-medium leading-snug flex-1">{ticket.title}</p>
+                    <p className="text-sm text-theme-dark font-medium leading-snug flex-1">{ticket.title}</p>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <button
-                                className="w-6 h-6 flex items-center justify-center rounded opacity-0 group-hover:opacity-100 hover:bg-trollo-gray-100 transition-all shrink-0"
+                                className="w-6 h-6 flex items-center justify-center rounded opacity-0 group-hover:opacity-100 hover:bg-theme-gray-100 transition-all shrink-0"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <MoreVertical className="w-3.5 h-3.5 text-trollo-gray-500" />
+                                <MoreVertical className="w-3.5 h-3.5 text-theme-gray-500" />
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-32">
@@ -94,7 +94,7 @@ const TicketCard = ({ ticket, onDelete, onEdit, onDragStart }: TicketCardProps) 
                                     className={`text-[10px] px-1.5 py-0.5 font-medium gap-1 ${
                                         isLate
                                             ? 'bg-red-100 text-red-600 border-red-200'
-                                            : 'bg-trollo-gray-100 text-trollo-gray-500 border-trollo-gray-100'
+                                            : 'bg-theme-gray-100 text-theme-gray-500 border-theme-gray-100'
                                     }`}
                                     variant="outline"
                                 >
@@ -110,7 +110,7 @@ const TicketCard = ({ ticket, onDelete, onEdit, onDragStart }: TicketCardProps) 
                             {hasChecklist && (
                                 <span
                                     className={`flex items-center gap-0.5 text-[10px] font-medium ${
-                                        checkedCount === totalCount ? 'text-label-green' : 'text-trollo-gray-500'
+                                        checkedCount === totalCount ? 'text-label-green' : 'text-theme-gray-500'
                                     }`}
                                 >
                                     <CheckSquare className="w-3 h-3" />
@@ -120,7 +120,7 @@ const TicketCard = ({ ticket, onDelete, onEdit, onDragStart }: TicketCardProps) 
 
                             {/* 댓글 */}
                             {(ticket.commentCount ?? 0) > 0 && (
-                                <span className="flex items-center gap-0.5 text-[10px] text-trollo-gray-500">
+                                <span className="flex items-center gap-0.5 text-[10px] text-theme-gray-500">
                                     <MessageSquare className="w-3 h-3" />
                                     {ticket.commentCount}
                                 </span>
@@ -128,7 +128,7 @@ const TicketCard = ({ ticket, onDelete, onEdit, onDragStart }: TicketCardProps) 
 
                             {/* 첨부파일 */}
                             {(ticket.attachmentCount ?? 0) > 0 && (
-                                <span className="flex items-center gap-0.5 text-[10px] text-trollo-gray-500">
+                                <span className="flex items-center gap-0.5 text-[10px] text-theme-gray-500">
                                     <Paperclip className="w-3 h-3" />
                                     {ticket.attachmentCount}
                                 </span>

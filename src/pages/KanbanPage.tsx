@@ -224,10 +224,10 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
     return (
         <div className="h-screen flex flex-col">
             {/* 글로벌 네비게이션 바 (Navy) */}
-            <header className="h-11 bg-trollo-navy px-4 flex items-center justify-between shrink-0 z-10">
+            <header className="h-11 bg-theme-dark px-4 flex items-center justify-between shrink-0 z-10">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-6 h-6 rounded bg-trollo-orange flex items-center justify-center">
+                        <div className="w-6 h-6 rounded bg-theme-primary flex items-center justify-center">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                                 <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white" />
                                 <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" />
@@ -246,7 +246,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
 
                     <Button
                         size="sm"
-                        className="bg-trollo-orange hover:bg-trollo-orange/90 text-white font-semibold h-7 px-3 text-xs"
+                        className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold h-7 px-3 text-xs"
                     >
                         Create
                     </Button>
@@ -266,7 +266,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     </button>
                     <button
                         onClick={onLogout}
-                        className="w-7 h-7 rounded-full bg-trollo-orange flex items-center justify-center text-white text-xs font-bold hover:opacity-90"
+                        className="w-7 h-7 rounded-full bg-theme-primary flex items-center justify-center text-white text-xs font-bold hover:opacity-90"
                         title="로그아웃"
                     >
                         {user?.nickname.charAt(0).toUpperCase() || 'U'}
@@ -359,7 +359,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
             </div>
 
             {/* 하단 도구 모음 (시안 반영) */}
-            <div className="h-11 bg-white border-t border-trollo-gray-100 flex items-center justify-center gap-2 shrink-0">
+            <div className="h-11 bg-white border-t border-theme-gray-100 flex items-center justify-center gap-2 shrink-0">
                 {[
                     { icon: '📥', label: 'Inbox' },
                     { icon: '📅', label: 'Planner' },
@@ -370,8 +370,8 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                         key={item.label}
                         className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                             item.active
-                                ? 'bg-trollo-gray-100 text-trollo-navy'
-                                : 'text-trollo-gray-500 hover:bg-trollo-gray-100/50'
+                                ? 'bg-theme-gray-100 text-theme-dark'
+                                : 'text-theme-gray-500 hover:bg-theme-gray-100/50'
                         }`}
                     >
                         <span>{item.icon}</span>
@@ -384,7 +384,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
             <Dialog open={isAddBoardDialogOpen} onOpenChange={setIsAddBoardDialogOpen}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-trollo-navy">새 보드 추가</DialogTitle>
+                        <DialogTitle className="text-theme-dark">새 보드 추가</DialogTitle>
                         <DialogDescription>워크스페이스에 새로운 상태 열을 추가합니다.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
@@ -396,7 +396,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                                 if (e.key === 'Enter') handleAddBoard();
                             }}
                             autoFocus
-                            className="border-trollo-gray-300 focus:border-trollo-orange"
+                            className="border-theme-gray-300 focus:border-theme-primary"
                         />
                     </div>
                     <DialogFooter>
@@ -406,7 +406,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                         <Button
                             onClick={handleAddBoard}
                             disabled={!newBoardName.trim()}
-                            className="bg-trollo-orange hover:bg-trollo-orange/90 text-white"
+                            className="bg-theme-primary hover:bg-theme-primary/90 text-white"
                         >
                             추가
                         </Button>

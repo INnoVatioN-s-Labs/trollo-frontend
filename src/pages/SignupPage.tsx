@@ -70,11 +70,11 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-br from-orange-50/30 via-white to-slate-50">
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-theme-primary-light/30 via-white to-slate-50">
             {/* 상단 네비게이션 바 */}
-            <header className="h-14 border-b border-trollo-gray-100 bg-white px-6 flex items-center justify-between shrink-0">
+            <header className="h-14 border-b border-theme-gray-100 bg-white px-6 flex items-center justify-between shrink-0">
                 <Link to="/login" className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-trollo-orange flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-theme-primary flex items-center justify-center">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                             <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white" />
                             <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" />
@@ -82,11 +82,11 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             <rect x="14" y="14" width="4" height="4" rx="1" fill="white" />
                         </svg>
                     </div>
-                    <span className="text-lg font-bold text-trollo-navy">Trollo</span>
+                    <span className="text-lg font-bold text-theme-dark">Trollo</span>
                 </Link>
-                <div className="flex items-center gap-2 text-sm text-trollo-gray-500">
+                <div className="flex items-center gap-2 text-sm text-theme-gray-500">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-trollo-orange font-semibold hover:underline">
+                    <Link to="/login" className="text-theme-primary font-semibold hover:underline">
                         Log In
                     </Link>
                 </div>
@@ -96,8 +96,8 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
             <div className="flex-1 flex items-center justify-center p-4">
                 <Card className="w-full max-w-md shadow-xl border-0 bg-white">
                     <CardHeader className="text-center space-y-2 pt-8 pb-2">
-                        <h1 className="text-2xl font-bold text-trollo-navy tracking-tight">Trollo Signup</h1>
-                        <p className="text-sm text-trollo-gray-500">Create your account to get started</p>
+                        <h1 className="text-2xl font-bold text-theme-dark tracking-tight">Trollo Signup</h1>
+                        <p className="text-sm text-theme-gray-500">Create your account to get started</p>
                     </CardHeader>
 
                     <CardContent className="px-8 pt-4 pb-2">
@@ -110,71 +110,71 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
 
                             {/* Full Name */}
                             <div className="space-y-2">
-                                <Label htmlFor="nickname" className="text-sm font-medium text-trollo-navy">
+                                <Label htmlFor="nickname" className="text-sm font-medium text-theme-dark">
                                     Full Name
                                 </Label>
                                 <div className="relative">
-                                    <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-trollo-gray-500" />
+                                    <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="nickname"
                                         placeholder="Enter your full name"
                                         value={nickname}
                                         onChange={(e) => setNickname(e.target.value)}
-                                        className="h-12 pl-10 border-trollo-gray-300 focus:border-trollo-orange"
+                                        className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
                             </div>
 
                             {/* Email */}
                             <div className="space-y-2">
-                                <Label htmlFor="email" className="text-sm font-medium text-trollo-navy">
+                                <Label htmlFor="email" className="text-sm font-medium text-theme-dark">
                                     Email Address
                                 </Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-trollo-gray-500" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="email"
                                         type="email"
                                         placeholder="e.g. name@email.com"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        className="h-12 pl-10 border-trollo-gray-300 focus:border-trollo-orange"
+                                        className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
                             </div>
 
                             {/* Password */}
                             <div className="space-y-2">
-                                <Label htmlFor="password" className="text-sm font-medium text-trollo-navy">
+                                <Label htmlFor="password" className="text-sm font-medium text-theme-dark">
                                     Password
                                 </Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-trollo-gray-500" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="password"
                                         type="password"
                                         placeholder="Min. 8 characters"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="h-12 pl-10 border-trollo-gray-300 focus:border-trollo-orange"
+                                        className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
                             </div>
 
                             {/* Confirm Password */}
                             <div className="space-y-2">
-                                <Label htmlFor="confirmPassword" className="text-sm font-medium text-trollo-navy">
+                                <Label htmlFor="confirmPassword" className="text-sm font-medium text-theme-dark">
                                     Confirm Password
                                 </Label>
                                 <div className="relative">
-                                    <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-trollo-gray-500" />
+                                    <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="confirmPassword"
                                         type="password"
                                         placeholder="Repeat your password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="h-12 pl-10 border-trollo-gray-300 focus:border-trollo-orange"
+                                        className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
                             </div>
@@ -184,15 +184,15 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                                 <input
                                     type="checkbox"
                                     id="terms"
-                                    className="w-4 h-4 mt-0.5 rounded border-trollo-gray-300 accent-trollo-orange"
+                                    className="w-4 h-4 mt-0.5 rounded border-theme-gray-300 accent-theme-primary"
                                 />
-                                <label htmlFor="terms" className="text-xs text-trollo-gray-500 leading-relaxed">
+                                <label htmlFor="terms" className="text-xs text-theme-gray-500 leading-relaxed">
                                     By signing up, you agree to our{' '}
-                                    <span className="text-trollo-orange cursor-pointer hover:underline">
+                                    <span className="text-theme-primary cursor-pointer hover:underline">
                                         Terms of Service
                                     </span>{' '}
                                     and{' '}
-                                    <span className="text-trollo-orange cursor-pointer hover:underline">
+                                    <span className="text-theme-primary cursor-pointer hover:underline">
                                         Privacy Policy
                                     </span>
                                     .
@@ -203,7 +203,7 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             <Button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full h-12 bg-trollo-orange hover:bg-trollo-orange/90 text-white font-semibold text-base rounded-lg shadow-md shadow-trollo-orange/20 transition-all"
+                                className="w-full h-12 bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-base rounded-lg shadow-md shadow-theme-primary/20 transition-all"
                             >
                                 {isSubmitting ? (
                                     '가입 중...'
@@ -218,8 +218,8 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
 
                         {/* 구분선 */}
                         <div className="relative my-6">
-                            <Separator className="bg-trollo-gray-100" />
-                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-xs text-trollo-gray-500 uppercase tracking-widest">
+                            <Separator className="bg-theme-gray-100" />
+                            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-xs text-theme-gray-500 uppercase tracking-widest">
                                 or continue with
                             </span>
                         </div>
@@ -229,7 +229,7 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             <Button
                                 variant="outline"
                                 type="button"
-                                className="h-11 border-trollo-gray-300 text-trollo-navy hover:bg-trollo-gray-100/50"
+                                className="h-11 border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100/50"
                             >
                                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                                     <path
@@ -254,7 +254,7 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             <Button
                                 variant="outline"
                                 type="button"
-                                className="h-11 border-trollo-gray-300 text-trollo-navy hover:bg-trollo-gray-100/50"
+                                className="h-11 border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100/50"
                             >
                                 <Github className="w-4 h-4 mr-2" />
                                 GitHub
@@ -263,7 +263,7 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                     </CardContent>
 
                     <CardFooter className="justify-center pb-6 pt-2">
-                        <p className="text-xs text-trollo-gray-300">© 2024 Trollo Inc. Productivity simplified.</p>
+                        <p className="text-xs text-theme-gray-300">© 2024 Trollo Inc. Productivity simplified.</p>
                     </CardFooter>
                 </Card>
             </div>
