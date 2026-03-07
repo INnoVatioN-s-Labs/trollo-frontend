@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import '@fontsource-variable/geist';
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import './styles/palette.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -107,7 +108,7 @@
 }
 
 @theme inline {
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-sans: 'Pretendard Variable', Pretendard, sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -146,28 +147,6 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
-
-    /* Trollo 커스텀 색상 토큰 */
-    --color-trollo-orange: #ff6b00;
-    --color-trollo-orange-light: #fff3e0;
-    --color-trollo-navy: #172b4d;
-    --color-trollo-navy-light: #2c3e6b;
-    --color-trollo-gray-500: #7a869a;
-    --color-trollo-gray-300: #c1c7d0;
-    --color-trollo-gray-100: #ebecf0;
-
-    /* 라벨 색상 */
-    --color-label-blue: #0079bf;
-    --color-label-green: #61bd4f;
-    --color-label-orange: #ff9f1a;
-    --color-label-red: #eb5a46;
-    --color-label-purple: #c377e0;
-    --color-label-yellow: #f2d600;
-
-    /* 보드 배경 그래디언트용 */
-    --color-board-bg-from: #2c6e63;
-    --color-board-bg-via: #7fb5ae;
-    --color-board-bg-to: #a8d5ba;
 }
 
 @layer base {

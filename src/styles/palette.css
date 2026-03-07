@@ -1,0 +1,25 @@
+@theme inline {
+    /* Trollo 브랜드 색상 */
+    --color-trollo-orange: #ff6b00;
+    --color-trollo-orange-light: #fff3e0;
+    --color-trollo-navy: #172b4d;
+    --color-trollo-navy-light: #2c3e6b;
+
+    /* 계층적 그레이 스케일 */
+    --color-trollo-gray-500: #7a869a;
+    --color-trollo-gray-300: #c1c7d0;
+    --color-trollo-gray-100: #ebecf0;
+
+    /* 칸반 티켓 라벨 색상 */
+    --color-label-blue: #0079bf;
+    --color-label-green: #61bd4f;
+    --color-label-orange: #ff9f1a;
+    --color-label-red: #eb5a46;
+    --color-label-purple: #c377e0;
+    --color-label-yellow: #f2d600;
+
+    /* 메인 보드 배경 그래디언트 색상 (Teal) */
+    --color-board-bg-from: #2c6e63;
+    --color-board-bg-via: #7fb5ae;
+    --color-board-bg-to: #a8d5ba;
+}
