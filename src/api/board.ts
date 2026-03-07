@@ -8,11 +8,11 @@ export const createBoard = async (workspaceId: number, data: BoardCreateRequest)
 };
 
 /** 보드 순서 변경 (드래그 앤 드롭) */
-export const reorderBoard = async (boardId: number, data: BoardReorderRequest): Promise<void> => {
-    await apiClient.patch(`/boards/${boardId}/reorder`, data);
+export const reorderBoard = async (workspaceId: number, boardId: number, data: BoardReorderRequest): Promise<void> => {
+    await apiClient.patch(`/workspaces/${workspaceId}/boards/${boardId}/reorder`, data);
 };
 
 /** 보드 삭제 */
-export const deleteBoard = async (boardId: number): Promise<void> => {
-    await apiClient.delete(`/boards/${boardId}`);
+export const deleteBoard = async (workspaceId: number, boardId: number): Promise<void> => {
+    await apiClient.delete(`/workspaces/${workspaceId}/boards/${boardId}`);
 };

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,12 +11,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { getWorkspaces, createWorkspace } from '@/api/workspace';
 import type { User, Workspace } from '@/types';
 import {
     Search,
     Plus,
     Bell,
-    LogOut,
     LayoutGrid,
     Clock,
     Star,
@@ -55,49 +55,21 @@ interface RecentActivity {
 const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
     const navigate = useNavigate();
 
-    // Mock 워크스페이스 데이터
-    const [workspaces] = useState<Workspace[]>([
-        {
-            id: 1,
-            name: 'Development Board',
-            description: 'Main engineering workflow, sprint planning, and technical debt tracking.',
-            coverColor: '#FF6B00',
-            iconEmoji: '💻',
-            memberCount: 12,
-            members: [
-                { id: 1, nickname: 'Alex' },
-                { id: 2, nickname: 'Brian' },
-                { id: 3, nickname: 'Chris' },
-            ],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        },
-        {
-            id: 2,
-            name: 'Marketing Team',
-            description: 'Social media calendar, ad campaigns, and brand asset management.',
-            coverColor: '#6366F1',
-            iconEmoji: '📣',
-            memberCount: 8,
-            members: [
-                { id: 4, nickname: 'Diana' },
-                { id: 5, nickname: 'Eve' },
-            ],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        },
-        {
-            id: 3,
-            name: 'Personal Projects',
-            description: 'Daily tasks, hobby project tracking, and private notes.',
-            coverColor: '#14B8A6',
-            iconEmoji: '📝',
-            memberCount: 1,
-            members: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        },
-    ]);
+    const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+
+    // 컴포넌트 마운트 시 워크스페이스 목록 조회
+    useEffect(() => {
+        fetchWorkspaces();
+    }, []);
+
+    const fetchWorkspaces = async () => {
+        try {
+            const data = await getWorkspaces();
+            setWorkspaces(data);
+        } catch (error) {
+            console.error('Failed to fetch workspaces:', error);
+        }
+    };
 
     // Mock 최근 활동
     const recentActivities: RecentActivity[] = [
@@ -133,13 +105,23 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
         navigate(`/workspace/${workspaceId}`);
     };
 
-    const handleCreateWorkspace = () => {
+    const handleCreateWorkspace = async () => {
         if (!newWorkspaceName.trim()) return;
-        // TODO: API 연동
-        console.log('워크스페이스 생성:', newWorkspaceName, newWorkspaceDesc);
-        setIsCreateDialogOpen(false);
-        setNewWorkspaceName('');
-        setNewWorkspaceDesc('');
+
+        try {
+            await createWorkspace({
+                name: newWorkspaceName.trim(),
+                description: newWorkspaceDesc.trim(),
+            });
+            // 새 워크스페이스 생성 후 목록 갱신
+            await fetchWorkspaces();
+            setIsCreateDialogOpen(false);
+            setNewWorkspaceName('');
+            setNewWorkspaceDesc('');
+        } catch (error) {
+            console.error('Failed to create workspace:', error);
+            alert('워크스페이스 생성에 실패했습니다.');
+        }
     };
 
     // 활동 아이콘 매핑

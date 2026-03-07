@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import type { User } from '@/types';
 import { signup } from '@/api/auth';
+import { parseJwt } from '@/lib/utils';
 import { User as UserIcon, Mail, Lock, ShieldCheck, ArrowRight, Github } from 'lucide-react';
 
 interface SignupPageProps {
@@ -48,7 +49,19 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
         setIsSubmitting(true);
         try {
             const res = await signup({ email, password, nickname });
-            onLogin(res.token, res.user);
+            const token = res.accessToken;
+
+            // 토큰을 디코드하거나, 새로 가입한 정보를 바탕으로 User 생성
+            const decoded = parseJwt(token);
+            const userEmail = decoded?.sub ?? email;
+
+            const user: User = {
+                id: Date.now(),
+                email: userEmail,
+                nickname: nickname, // 가입 시 입력한 정보 활용
+            };
+
+            onLogin(token, user);
         } catch {
             setError('회원가입에 실패했습니다. 이미 가입된 이메일일 수 있습니다.');
         } finally {

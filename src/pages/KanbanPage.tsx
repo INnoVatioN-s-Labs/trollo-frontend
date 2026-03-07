@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,11 @@ import {
 } from '@/components/ui/dialog';
 import BoardColumn from '@/components/kanban/BoardColumn';
 import TicketDetailModal from '@/components/kanban/TicketDetailModal';
-import type { Board, Ticket, User } from '@/types';
+import { getKanbanView } from '@/api/workspace';
+import { createBoard, deleteBoard } from '@/api/board';
+import { createTicket, deleteTicket, updateTicket, moveTicket } from '@/api/ticket';
+import type { Board, Ticket, User, Workspace } from '@/types';
+import { useParams } from 'react-router-dom';
 import { Plus, Star, Users, Filter, Search, Bell, MoreVertical, ArrowLeft } from 'lucide-react';
 
 interface KanbanPageProps {
@@ -30,164 +34,101 @@ interface KanbanPageProps {
 const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
     const navigate = useNavigate();
 
-    // Mock 데이터: 보드와 티켓 (체크리스트, 라벨 등 풍부한 데이터)
-    const [boards, setBoards] = useState<Board[]>([
-        {
-            id: 1,
-            name: 'To-Do',
-            position: 1,
-            tickets: [
-                {
-                    id: 101,
-                    title: 'Implement login authentication module',
-                    description: '',
-                    position: 1,
-                    labels: [
-                        { id: 1, name: 'Frontend', color: '#61BD4F' },
-                        { id: 2, name: 'Auth', color: '#0079BF' },
-                    ],
-                    assignees: [{ id: 1, nickname: 'ME' }],
-                    commentCount: 2,
-                    checklist: [
-                        { id: 1, text: 'Database Schema Design', checked: true },
-                        { id: 2, text: 'API Documentation with Swagger', checked: false },
-                        { id: 3, text: 'Frontend Dashboard Prototype', checked: false },
-                    ],
-                    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-                    updatedAt: new Date().toISOString(),
-                },
-                {
-                    id: 102,
-                    title: 'Refactor dashboard layout for mobile responsiveness',
-                    description: '',
-                    position: 2,
-                    labels: [{ id: 3, name: 'UI/UX', color: '#FF9F1A' }],
-                    assignees: [{ id: 2, nickname: 'AS' }],
-                    attachmentCount: 1,
-                    createdAt: new Date(Date.now() - 86400000).toISOString(),
-                    updatedAt: new Date().toISOString(),
-                },
-            ],
-        },
-        {
-            id: 2,
-            name: 'In Progress',
-            position: 2,
-            tickets: [
-                {
-                    id: 201,
-                    title: 'API Integration: DataStore Module',
-                    description: 'DataStore 모듈 API 연동 작업',
-                    position: 1,
-                    labels: [{ id: 4, name: 'Backend', color: '#EB5A46' }],
-                    assignees: [
-                        { id: 3, nickname: 'BK' },
-                        { id: 1, nickname: 'ME' },
-                    ],
-                    dueDate: '2024-01-24T17:00:00',
-                    checklist: [
-                        { id: 4, text: 'Database Schema Design', checked: true },
-                        { id: 5, text: 'API Documentation with Swagger', checked: false },
-                        { id: 6, text: 'Frontend Dashboard Prototype', checked: false },
-                    ],
-                    createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
-                    updatedAt: new Date().toISOString(),
-                },
-            ],
-        },
-        {
-            id: 3,
-            name: 'Testing',
-            position: 3,
-            tickets: [
-                {
-                    id: 301,
-                    title: 'Unit tests for checkout flow',
-                    description: '결제 흐름 유닛 테스트 작성',
-                    position: 1,
-                    assignees: [{ id: 4, nickname: 'JD' }],
-                    attachmentCount: 1,
-                    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-                    updatedAt: new Date().toISOString(),
-                },
-            ],
-        },
-        {
-            id: 4,
-            name: 'Done',
-            position: 4,
-            tickets: [
-                {
-                    id: 401,
-                    title: 'Setup initial project repository',
-                    description: '프로젝트 초기 저장소 설정 완료',
-                    position: 1,
-                    labels: [{ id: 5, name: 'COMPLETED', color: '#61BD4F' }],
-                    assignees: [{ id: 2, nickname: 'AS' }],
-                    dueDate: '2024-01-20T17:00:00',
-                    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-                    updatedAt: new Date().toISOString(),
-                },
-            ],
-        },
-    ]);
+    const [boards, setBoards] = useState<Board[]>([]);
 
     const [isAddBoardDialogOpen, setIsAddBoardDialogOpen] = useState(false);
     const [newBoardName, setNewBoardName] = useState('');
     const [draggedTicket, setDraggedTicket] = useState<{ ticket: Ticket; sourceBoardId: number } | null>(null);
-    const [nextTicketId, setNextTicketId] = useState(500);
 
     // 티켓 디테일 모달 상태
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
     const [selectedBoardName, setSelectedBoardName] = useState('');
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-    // 보드 추가
-    const handleAddBoard = () => {
-        if (!newBoardName.trim()) return;
-        const newBoard: Board = {
-            id: Date.now(),
-            name: newBoardName.trim(),
-            position: boards.length + 1,
-            tickets: [],
-        };
-        setBoards((prev) => [...prev, newBoard]);
-        setNewBoardName('');
-        setIsAddBoardDialogOpen(false);
+    const { workspaceId } = useParams();
+    const [workspace, setWorkspace] = useState<Workspace | null>(null);
+
+    // 컴포넌트 마운트 시 칸반 통합 조회
+    useEffect(() => {
+        if (workspaceId) {
+            fetchKanbanData(Number(workspaceId));
+        }
+    }, [workspaceId]);
+
+    const fetchKanbanData = async (id: number) => {
+        try {
+            const kanbanData = await getKanbanView(id);
+            setBoards(kanbanData.boards || []);
+            setWorkspace({
+                id: kanbanData.workspaceId,
+                name: kanbanData.workspaceName,
+                description: kanbanData.workspaceDescription,
+                createdAt: '',
+                updatedAt: '',
+            });
+        } catch (error) {
+            console.error('Failed to fetch kanban view', error);
+        }
+    };
+
+    // 보드 추가 (API 연동)
+    const handleAddBoard = async () => {
+        if (!newBoardName.trim() || !workspaceId) return;
+
+        try {
+            await createBoard(Number(workspaceId), {
+                name: newBoardName.trim(),
+            });
+
+            // 보드 생성 후 서버에서 다시 가져와 동기화
+            await fetchKanbanData(Number(workspaceId));
+            setNewBoardName('');
+            setIsAddBoardDialogOpen(false);
+        } catch (error) {
+            console.error('Failed to create board:', error);
+            alert('보드 생성에 실패했습니다.');
+        }
     };
 
     // 보드 삭제
-    const handleDeleteBoard = (boardId: number) => {
-        setBoards((prev) => prev.filter((b) => b.id !== boardId));
+    const handleDeleteBoard = async (boardId: number) => {
+        if (!workspaceId) return;
+        try {
+            await deleteBoard(Number(workspaceId), boardId);
+            setBoards((prev) => prev.filter((b) => b.id !== boardId));
+        } catch (error) {
+            console.error('Failed to delete board', error);
+        }
     };
 
     // 티켓 생성
-    const handleCreateTicket = (boardId: number, title: string, description?: string) => {
-        setBoards((prev) =>
-            prev.map((board) => {
-                if (board.id !== boardId) return board;
-                const newTicket: Ticket = {
-                    id: nextTicketId,
-                    title,
-                    description,
-                    position: (board.tickets?.length ?? 0) + 1,
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
-                };
-                setNextTicketId((id) => id + 1);
-                return { ...board, tickets: [...(board.tickets || []), newTicket] };
-            })
-        );
+    const handleCreateTicket = async (boardId: number, title: string, description?: string) => {
+        if (!workspaceId) return;
+        try {
+            await createTicket(Number(workspaceId), boardId, { title, description });
+            await fetchKanbanData(Number(workspaceId));
+        } catch (error) {
+            console.error('Failed to create ticket', error);
+        }
     };
 
     // 티켓 삭제
-    const handleDeleteTicket = (ticketId: number) => {
-        setBoards((prev) =>
-            prev.map((board) => ({
-                ...board,
-                tickets: board.tickets.filter((t) => t.id !== ticketId),
-            }))
-        );
+    const handleDeleteTicket = async (ticketId: number) => {
+        if (!workspaceId) return;
+        const parentBoard = boards.find((b) => b.tickets.some((t) => t.id === ticketId));
+        if (!parentBoard) return;
+
+        try {
+            await deleteTicket(Number(workspaceId), parentBoard.id, ticketId);
+            setBoards((prev) =>
+                prev.map((board) => ({
+                    ...board,
+                    tickets: board.tickets.filter((t) => t.id !== ticketId),
+                }))
+            );
+        } catch (error) {
+            console.error('Failed to delete ticket', error);
+        }
     };
 
     // 티켓 클릭 → 디테일 모달 오픈
@@ -200,14 +141,27 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
     };
 
     // 티켓 업데이트 (모달에서)
-    const handleUpdateTicket = (updatedTicket: Ticket) => {
-        setBoards((prev) =>
-            prev.map((board) => ({
-                ...board,
-                tickets: board.tickets.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)),
-            }))
-        );
-        setSelectedTicket(updatedTicket);
+    const handleUpdateTicket = async (updatedTicket: Ticket) => {
+        if (!workspaceId) return;
+        const parentBoard = boards.find((b) => b.tickets.some((t) => t.id === updatedTicket.id));
+        if (!parentBoard) return;
+
+        try {
+            await updateTicket(Number(workspaceId), parentBoard.id, updatedTicket.id, {
+                title: updatedTicket.title,
+                description: updatedTicket.description,
+            });
+
+            setBoards((prev) =>
+                prev.map((board) => ({
+                    ...board,
+                    tickets: board.tickets.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)),
+                }))
+            );
+            setSelectedTicket(updatedTicket);
+        } catch (error) {
+            console.error('Failed to update ticket', error);
+        }
     };
 
     // 드래그 앤 드롭: 시작
@@ -217,9 +171,11 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
 
     // 드래그 앤 드롭: 드롭
     const handleTicketDrop = useCallback(
-        (_e: React.DragEvent, targetBoardId: number, targetPosition: number) => {
-            if (!draggedTicket) return;
+        async (_e: React.DragEvent, targetBoardId: number, targetPosition: number) => {
+            if (!draggedTicket || !workspaceId) return;
             const { ticket, sourceBoardId } = draggedTicket;
+
+            // UI 상태 반영
             setBoards((prev) => {
                 return prev.map((board) => {
                     if (board.id === sourceBoardId && board.id !== targetBoardId) {
@@ -243,9 +199,24 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     return board;
                 });
             });
+
+            // 티켓 위치 변경 API 연동
+            try {
+                await moveTicket(Number(workspaceId), sourceBoardId, ticket.id, {
+                    targetBoardId,
+                    targetPosition,
+                });
+                // 정확한 동기화를 위해 백엔드에서 다시 가져오기
+                await fetchKanbanData(Number(workspaceId));
+            } catch (error) {
+                console.error('Failed to move ticket', error);
+                // 실패시 원래 상태 복구 등의 예외 처리 (여기서는 다시 불러오기로 처리)
+                await fetchKanbanData(Number(workspaceId));
+            }
+
             setDraggedTicket(null);
         },
-        [draggedTicket]
+        [draggedTicket, workspaceId]
     );
 
     const sortedBoards = [...boards].sort((a, b) => a.position - b.position);
@@ -314,7 +285,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     <ArrowLeft className="w-4 h-4" />
                 </Button>
 
-                <span className="text-sm font-bold text-white">Development Board</span>
+                <span className="text-sm font-bold text-white">{workspace?.name || 'Development Board'}</span>
 
                 <Button variant="ghost" size="sm" className="h-7 text-white/60 hover:text-white hover:bg-white/10 p-1">
                     <Star className="w-4 h-4" />

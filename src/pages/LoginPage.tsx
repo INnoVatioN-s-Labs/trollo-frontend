@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import type { User } from '@/types';
 import { login } from '@/api/auth';
+import { parseJwt } from '@/lib/utils';
 import { Mail, Lock, LogIn, Github } from 'lucide-react';
 
 interface LoginPageProps {
@@ -37,7 +38,20 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
         setIsSubmitting(true);
         try {
             const res = await login({ email, password });
-            onLogin(res.token, res.user);
+            const token = res.accessToken;
+
+            // JWT에서 유저 이메일 추출
+            const decoded = parseJwt(token);
+            const userEmail = decoded?.sub ?? email;
+
+            // 프론트엔드 상태 관리를 위한 임시 User 객체 생성
+            const user: User = {
+                id: Date.now(), // 또는 토큰의 id 값을 쓰지만 없다면 임시 발급
+                email: userEmail,
+                nickname: userEmail.split('@')[0], // 이메일 앞부분을 닉네임으로
+            };
+
+            onLogin(token, user);
         } catch {
             setError('이메일 또는 비밀번호가 올바르지 않습니다.');
         } finally {

@@ -18,3 +18,9 @@ export const getKanbanView = async (workspaceId: number): Promise<KanbanView> =>
     const response = await apiClient.get<ReturnMessage<KanbanView>>(`/workspaces/${workspaceId}/kanban`);
     return response.data.data;
 };
+
+/** 워크스페이스 단건 조회 */
+export const getWorkspaceById = async (workspaceId: number): Promise<Workspace> => {
+    const response = await apiClient.get<ReturnMessage<Workspace>>(`/workspaces/${workspaceId}`);
+    return response.data.data;
+};

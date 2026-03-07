@@ -25,8 +25,8 @@ export interface LoginRequest {
 
 /** 인증 응답 (JWT 토큰 포함) */
 export interface AuthResponse {
-    token: string;
-    user: User;
+    accessToken: string;
+    tokenType: string;
 }
 
 // ===========================
@@ -131,9 +131,15 @@ export interface TicketCreateRequest {
 }
 
 /** 티켓 이동 요청 (드래그 앤 드롭) */
-export interface TicketMoveRequest {
+export interface MoveTicketRequest {
     targetBoardId: number;
     targetPosition: number;
+}
+
+/** 티켓 수정 요청 */
+export interface UpdateTicketRequest {
+    title: string;
+    description?: string;
 }
 
 // ===========================
@@ -143,6 +149,8 @@ export interface TicketMoveRequest {
 /** 칸반 통합 조회 응답 */
 export interface KanbanView {
     workspaceId: number;
+    workspaceName: string;
+    workspaceDescription?: string;
     boards: Board[];
 }
 
