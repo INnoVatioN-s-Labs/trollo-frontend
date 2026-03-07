@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -43,6 +44,7 @@ const BoardColumn = ({
     const [newTicketTitle, setNewTicketTitle] = useState('');
     const [newTicketDesc, setNewTicketDesc] = useState('');
     const [isDragOver, setIsDragOver] = useState(false);
+    const { t } = useTranslation();
 
     // 티켓 추가 폼 제출
     const handleAddTicket = () => {
@@ -112,7 +114,7 @@ const BoardColumn = ({
                                 className="text-destructive focus:text-destructive"
                             >
                                 <Trash2 className="mr-2 h-3.5 w-3.5" />
-                                보드 삭제
+                                {t('ticket_modal.delete')}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -145,8 +147,8 @@ const BoardColumn = ({
                     {/* 빈 보드일 때 드롭 안내 */}
                     {sortedTickets.length === 0 && (
                         <div className="py-8 text-center text-xs text-theme-gray-500/60">
-                            <p>티켓이 없습니다</p>
-                            <p className="mt-1">여기에 드래그하거나 추가하세요</p>
+                            <p>{t('kanban.empty_board')}</p>
+                            <p className="mt-1">{t('kanban.drag_here')}</p>
                         </div>
                     )}
                 </div>
@@ -157,7 +159,7 @@ const BoardColumn = ({
                 {isAddingTicket ? (
                     <div className="space-y-2">
                         <Input
-                            placeholder="티켓 제목"
+                            placeholder={t('ticket_modal.title_placeholder')}
                             value={newTicketTitle}
                             onChange={(e) => setNewTicketTitle(e.target.value)}
                             onKeyDown={(e) => {
@@ -171,7 +173,7 @@ const BoardColumn = ({
                             className="h-8 text-sm border-theme-gray-300 focus:border-theme-primary"
                         />
                         <Textarea
-                            placeholder="설명 (선택사항)"
+                            placeholder={t('kanban.new_card_desc_placeholder')}
                             value={newTicketDesc}
                             onChange={(e) => setNewTicketDesc(e.target.value)}
                             className="text-sm min-h-[60px] resize-none border-theme-gray-300 focus:border-theme-primary"
@@ -183,7 +185,7 @@ const BoardColumn = ({
                                 onClick={handleAddTicket}
                                 className="flex-1 h-7 text-xs bg-theme-primary hover:bg-theme-primary/90 text-white"
                             >
-                                추가
+                                {t('kanban.add_card_button')}
                             </Button>
                             <Button
                                 size="sm"
@@ -206,7 +208,7 @@ const BoardColumn = ({
                         onClick={() => setIsAddingTicket(true)}
                     >
                         <Plus className="h-3.5 w-3.5 mr-1" />
-                        Add a card
+                        {t('kanban.add_card')}
                     </Button>
                 )}
             </div>

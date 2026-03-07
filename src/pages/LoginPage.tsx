@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,8 @@ interface LoginPageProps {
  * - 하단 풋터 (Terms, Privacy, Help Center)
  */
 const LoginPage = ({ onLogin }: LoginPageProps) => {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -31,7 +34,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
         setError('');
 
         if (!email.trim() || !password.trim()) {
-            setError('이메일과 비밀번호를 모두 입력해 주세요.');
+            setError(t('auth.email_password_required'));
             return;
         }
 
@@ -53,7 +56,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
 
             onLogin(token, user);
         } catch {
-            setError('이메일 또는 비밀번호가 올바르지 않습니다.');
+            setError(t('auth.invalid_credentials'));
         } finally {
             setIsSubmitting(false);
         }
@@ -77,10 +80,12 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-theme-dark tracking-tight">Trollo Login</h1>
-                            <p className="text-sm text-theme-gray-500 mt-1">
-                                Welcome back! Manage your team tasks effectively.
-                            </p>
+                            <CardTitle className="text-2xl font-bold text-theme-dark tracking-tight">
+                                {t('auth.login_title')}
+                            </CardTitle>
+                            <CardDescription className="text-sm text-theme-gray-500 mt-1">
+                                {t('auth.login_subtitle')}
+                            </CardDescription>
                         </div>
                     </CardHeader>
 
@@ -100,12 +105,12 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                     className="flex items-center gap-1.5 text-sm font-medium text-theme-dark"
                                 >
                                     <Mail className="w-4 h-4 text-theme-gray-500" />
-                                    Email Address
+                                    {t('auth.email_address')}
                                 </Label>
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="name@company.com"
+                                    placeholder={t('auth.email_placeholder')}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="h-12 border-theme-gray-300 focus:border-theme-primary focus:ring-theme-primary/20"
@@ -120,19 +125,19 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                         className="flex items-center gap-1.5 text-sm font-medium text-theme-dark"
                                     >
                                         <Lock className="w-4 h-4 text-theme-gray-500" />
-                                        Password
+                                        {t('auth.password')}
                                     </Label>
                                     <button
                                         type="button"
                                         className="text-xs text-theme-primary hover:underline font-medium"
                                     >
-                                        Forgot password?
+                                        {t('auth.forgot_password')}
                                     </button>
                                 </div>
                                 <Input
                                     id="password"
                                     type="password"
-                                    placeholder="••••••••"
+                                    placeholder={t('auth.password_placeholder')}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="h-12 border-theme-gray-300 focus:border-theme-primary focus:ring-theme-primary/20"
@@ -147,7 +152,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                     className="w-4 h-4 rounded border-theme-gray-300 text-theme-primary focus:ring-theme-primary/20 accent-theme-primary"
                                 />
                                 <label htmlFor="keepLoggedIn" className="text-sm text-theme-gray-500">
-                                    Keep me logged in
+                                    {t('auth.keep_logged_in')}
                                 </label>
                             </div>
 
@@ -158,10 +163,10 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                 className="w-full h-12 bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-base rounded-lg shadow-md shadow-theme-primary/20 transition-all"
                             >
                                 {isSubmitting ? (
-                                    '로그인 중...'
+                                    t('auth.logging_in')
                                 ) : (
                                     <>
-                                        Sign In
+                                        {t('auth.sign_in')}
                                         <LogIn className="w-4 h-4 ml-2" />
                                     </>
                                 )}
@@ -172,7 +177,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                         <div className="relative my-6">
                             <Separator className="bg-theme-gray-100" />
                             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-xs text-theme-gray-500 uppercase tracking-widest">
-                                or continue with
+                                {t('auth.or_continue_with')}
                             </span>
                         </div>
 
@@ -201,7 +206,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                         fill="#EA4335"
                                     />
                                 </svg>
-                                Google
+                                {t('auth.google_login')}
                             </Button>
                             <Button
                                 variant="outline"
@@ -209,16 +214,16 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
                                 className="h-11 border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100/50"
                             >
                                 <Github className="w-4 h-4 mr-2" />
-                                GitHub
+                                {t('auth.github_login')}
                             </Button>
                         </div>
                     </CardContent>
 
                     <CardFooter className="justify-center pb-8 pt-4">
                         <p className="text-sm text-theme-gray-500">
-                            Don't have an account?{' '}
+                            {t('auth.no_account')}{' '}
                             <Link to="/signup" className="text-theme-primary font-semibold hover:underline">
-                                Create an account
+                                {t('auth.create_account')}
                             </Link>
                         </p>
                     </CardFooter>

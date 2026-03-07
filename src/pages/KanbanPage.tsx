@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,6 +34,7 @@ interface KanbanPageProps {
  */
 const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [boards, setBoards] = useState<Board[]>([]);
 
@@ -239,16 +241,16 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     </div>
 
                     <nav className="hidden md:flex items-center gap-3 text-xs font-medium text-white/70">
-                        <button className="hover:text-white transition-colors">Workspaces</button>
-                        <button className="hover:text-white transition-colors">Recent</button>
-                        <button className="hover:text-white transition-colors">Starred</button>
+                        <button className="hover:text-white transition-colors">{t('nav.workspaces')}</button>
+                        <button className="hover:text-white transition-colors">{t('nav.recent')}</button>
+                        <button className="hover:text-white transition-colors">{t('nav.starred')}</button>
                     </nav>
 
                     <Button
                         size="sm"
                         className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold h-7 px-3 text-xs"
                     >
-                        Create
+                        {t('nav.create')}
                     </Button>
                 </div>
 
@@ -257,7 +259,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" />
                         <input
                             type="text"
-                            placeholder="Search"
+                            placeholder={t('nav.search')}
                             className="h-7 pl-8 pr-3 w-44 rounded-md border border-white/20 bg-white/10 text-xs text-white placeholder:text-white/40 focus:outline-none focus:bg-white/20 transition-colors"
                         />
                     </div>
@@ -267,7 +269,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     <button
                         onClick={onLogout}
                         className="w-7 h-7 rounded-full bg-theme-primary flex items-center justify-center text-white text-xs font-bold hover:opacity-90"
-                        title="로그아웃"
+                        title={t('nav.logout')}
                     >
                         {user?.nickname.charAt(0).toUpperCase() || 'U'}
                     </button>
@@ -311,7 +313,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     className="h-7 text-white/70 hover:text-white hover:bg-white/10 text-xs gap-1.5"
                 >
                     <Users className="w-3.5 h-3.5" />
-                    Share
+                    {t('nav.share')}
                 </Button>
 
                 <div className="flex-1" />
@@ -322,7 +324,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     className="h-7 text-white/70 hover:text-white hover:bg-white/10 text-xs gap-1.5"
                 >
                     <Filter className="w-3.5 h-3.5" />
-                    Filters
+                    {t('nav.filters')}
                 </Button>
                 <Button variant="ghost" size="sm" className="h-7 text-white/60 hover:text-white hover:bg-white/10 p-1">
                     <MoreVertical className="w-4 h-4" />
@@ -352,7 +354,7 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     >
                         <div className="flex items-center gap-2 font-medium text-sm">
                             <Plus className="w-5 h-5" />
-                            Add another list
+                            {t('kanban.add_list')}
                         </div>
                     </button>
                 </div>
@@ -361,10 +363,10 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
             {/* 하단 도구 모음 (시안 반영) */}
             <div className="h-11 bg-white border-t border-theme-gray-100 flex items-center justify-center gap-2 shrink-0">
                 {[
-                    { icon: '📥', label: 'Inbox' },
-                    { icon: '📅', label: 'Planner' },
-                    { icon: '📋', label: 'Board', active: true },
-                    { icon: '🔄', label: 'Switch' },
+                    { icon: '📥', label: t('bottom_bar.inbox') },
+                    { icon: '📅', label: t('bottom_bar.planner') },
+                    { icon: '📋', label: t('bottom_bar.board'), active: true },
+                    { icon: '🔄', label: t('bottom_bar.switch') },
                 ].map((item) => (
                     <button
                         key={item.label}
@@ -384,12 +386,12 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
             <Dialog open={isAddBoardDialogOpen} onOpenChange={setIsAddBoardDialogOpen}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-theme-dark">새 보드 추가</DialogTitle>
-                        <DialogDescription>워크스페이스에 새로운 상태 열을 추가합니다.</DialogDescription>
+                        <DialogTitle className="text-theme-dark">{t('kanban.add_board_title')}</DialogTitle>
+                        <DialogDescription>{t('kanban.add_board_desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
                         <Input
-                            placeholder="예: 🚀 배포 준비"
+                            placeholder={t('kanban.add_board_placeholder')}
                             value={newBoardName}
                             onChange={(e) => setNewBoardName(e.target.value)}
                             onKeyDown={(e) => {
@@ -401,14 +403,14 @@ const KanbanPage = ({ user, onLogout }: KanbanPageProps) => {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsAddBoardDialogOpen(false)}>
-                            취소
+                            {t('kanban.cancel')}
                         </Button>
                         <Button
                             onClick={handleAddBoard}
                             disabled={!newBoardName.trim()}
                             className="bg-theme-primary hover:bg-theme-primary/90 text-white"
                         >
-                            추가
+                            {t('kanban.add')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

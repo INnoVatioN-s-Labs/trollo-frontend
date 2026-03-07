@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +43,7 @@ interface TicketDetailModalProps {
  * - 우측: ADD TO CARD / ACTIONS 패널
  */
 const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: TicketDetailModalProps) => {
+    const { t } = useTranslation();
     const [description, setDescription] = useState(ticket?.description || '');
     const [isEditingDesc, setIsEditingDesc] = useState(false);
     const [comment, setComment] = useState('');
@@ -111,7 +113,8 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                 {ticket.title}
                             </DialogTitle>
                             <p className="text-sm text-theme-gray-500 mt-1">
-                                in list <span className="text-theme-dark underline cursor-pointer">{boardName}</span>
+                                {t('ticket_modal.in_list')}{' '}
+                                <span className="text-theme-dark underline cursor-pointer">{boardName}</span>
                             </p>
                         </div>
                     </div>
@@ -125,7 +128,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             {/* Members */}
                             <div>
                                 <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
-                                    Members
+                                    {t('ticket_modal.members')}
                                 </p>
                                 <div className="flex items-center gap-1">
                                     {members.map((m) => (
@@ -146,7 +149,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             {/* Labels */}
                             <div>
                                 <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
-                                    Labels
+                                    {t('ticket_modal.labels')}
                                 </p>
                                 <div className="flex items-center gap-1.5">
                                     {labels.map((label) => (
@@ -167,7 +170,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             {/* Due Date */}
                             <div>
                                 <p className="uppercase tracking-wider text-theme-gray-500 font-semibold mb-2">
-                                    Due Date
+                                    {t('ticket_modal.due_date')}
                                 </p>
                                 <div className="flex items-center gap-2">
                                     <Clock className={`w-4 h-4 ${isLate ? 'text-red-500' : 'text-theme-gray-500'}`} />
@@ -187,7 +190,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     </span>
                                     {isLate && (
                                         <Badge className="bg-red-100 text-red-600 text-[10px] px-1.5 py-0 font-bold">
-                                            LATE
+                                            {t('ticket_modal.late')}
                                         </Badge>
                                     )}
                                 </div>
@@ -201,7 +204,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             <div className="flex items-center justify-between mb-3">
                                 <div className="flex items-center gap-2">
                                     <AlignLeft className="w-4.5 h-4.5 text-theme-dark" />
-                                    <h3 className="font-bold text-theme-dark">Description</h3>
+                                    <h3 className="font-bold text-theme-dark">{t('ticket_modal.description')}</h3>
                                 </div>
                                 {!isEditingDesc && (
                                     <Button
@@ -210,7 +213,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                         className="h-7 text-xs border-theme-gray-300"
                                         onClick={() => setIsEditingDesc(true)}
                                     >
-                                        Edit
+                                        {t('ticket_modal.edit')}
                                     </Button>
                                 )}
                             </div>
@@ -219,7 +222,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     <Textarea
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Add a more detailed description..."
+                                        placeholder={t('ticket_modal.desc_placeholder')}
                                         className="min-h-[100px] border-theme-gray-300 focus:border-theme-primary"
                                         autoFocus
                                     />
@@ -229,7 +232,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                             className="bg-theme-primary hover:bg-theme-primary/90 text-white h-8 text-xs"
                                             onClick={handleSaveDescription}
                                         >
-                                            Save
+                                            {t('ticket_modal.save')}
                                         </Button>
                                         <Button
                                             size="sm"
@@ -237,7 +240,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                             className="h-8 text-xs"
                                             onClick={() => setIsEditingDesc(false)}
                                         >
-                                            Cancel
+                                            {t('ticket_modal.cancel')}
                                         </Button>
                                     </div>
                                 </div>
@@ -246,7 +249,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     className="bg-theme-gray-100/50 rounded-lg p-4 text-sm text-theme-gray-500 cursor-pointer hover:bg-theme-gray-100 transition-colors min-h-[80px]"
                                     onClick={() => setIsEditingDesc(true)}
                                 >
-                                    {description || 'Add a more detailed description...'}
+                                    {description || t('ticket_modal.desc_placeholder')}
                                 </div>
                             )}
                         </div>
@@ -257,10 +260,10 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
                                         <CheckSquare className="w-4.5 h-4.5 text-theme-dark" />
-                                        <h3 className="font-bold text-theme-dark">Checklist</h3>
+                                        <h3 className="font-bold text-theme-dark">{t('ticket_modal.checklist')}</h3>
                                     </div>
                                     <Button variant="outline" size="sm" className="h-7 text-xs border-theme-gray-300">
-                                        Delete
+                                        {t('ticket_modal.delete')}
                                     </Button>
                                 </div>
 
@@ -298,7 +301,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                 </div>
 
                                 <button className="mt-2 text-xs text-theme-gray-500 hover:text-theme-primary transition-colors font-medium">
-                                    + Add an item
+                                    {t('ticket_modal.add_an_item')}
                                 </button>
                             </div>
                         )}
@@ -310,10 +313,10 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
                                     <MessageSquare className="w-4.5 h-4.5 text-theme-dark" />
-                                    <h3 className="font-bold text-theme-dark">Comments and activity</h3>
+                                    <h3 className="font-bold text-theme-dark">{t('ticket_modal.comments_activity')}</h3>
                                 </div>
                                 <Button variant="outline" size="sm" className="h-7 text-xs border-theme-gray-300">
-                                    Show details
+                                    {t('ticket_modal.show_details')}
                                 </Button>
                             </div>
 
@@ -326,7 +329,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                     <Textarea
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
-                                        placeholder="Write a comment..."
+                                        placeholder={t('ticket_modal.write_comment')}
                                         className="border-0 focus-visible:ring-0 min-h-[60px] resize-none text-sm"
                                     />
                                     <div className="flex items-center justify-between px-3 py-2 bg-theme-gray-100/30">
@@ -342,7 +345,7 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                                             className="bg-theme-primary hover:bg-theme-primary/90 text-white h-7 text-xs px-4"
                                             disabled={!comment.trim()}
                                         >
-                                            Save
+                                            {t('ticket_modal.save')}
                                         </Button>
                                     </div>
                                 </div>
@@ -375,52 +378,63 @@ const TicketDetailModal = ({ ticket, boardName, open, onOpenChange, onUpdate }: 
                         {/* ADD TO CARD */}
                         <div>
                             <p className="uppercase tracking-wider text-[10px] text-theme-gray-500 font-semibold mb-2">
-                                Add to Card
+                                {t('ticket_modal.add_to_card')}
                             </p>
                             <div className="space-y-1.5">
-                                <SideButton icon={<Users className="w-4 h-4" />} label="Members" />
-                                <SideButton icon={<Tag className="w-4 h-4" />} label="Labels" />
-                                <SideButton icon={<CheckSquare className="w-4 h-4" />} label="Checklist" />
-                                <SideButton icon={<Clock className="w-4 h-4" />} label="Dates" />
-                                <SideButton icon={<Paperclip className="w-4 h-4" />} label="Attachment" />
+                                <SideButton icon={<Users className="w-4 h-4" />} label={t('ticket_modal.members')} />
+                                <SideButton icon={<Tag className="w-4 h-4" />} label={t('ticket_modal.labels')} />
+                                <SideButton
+                                    icon={<CheckSquare className="w-4 h-4" />}
+                                    label={t('ticket_modal.checklist')}
+                                />
+                                <SideButton icon={<Clock className="w-4 h-4" />} label={t('ticket_modal.dates')} />
+                                <SideButton
+                                    icon={<Paperclip className="w-4 h-4" />}
+                                    label={t('ticket_modal.attachment')}
+                                />
                             </div>
                         </div>
 
                         {/* ACTIONS */}
                         <div>
                             <p className="uppercase tracking-wider text-[10px] text-theme-gray-500 font-semibold mb-2">
-                                Actions
+                                {t('ticket_modal.actions')}
                             </p>
                             <div className="space-y-1.5">
-                                <SideButton icon={<ArrowRight className="w-4 h-4" />} label="Move" />
-                                <SideButton icon={<Copy className="w-4 h-4" />} label="Copy" />
-                                <SideButton icon={<FileText className="w-4 h-4" />} label="Make Template" />
+                                <SideButton icon={<ArrowRight className="w-4 h-4" />} label={t('ticket_modal.move')} />
+                                <SideButton icon={<Copy className="w-4 h-4" />} label={t('ticket_modal.copy')} />
+                                <SideButton
+                                    icon={<FileText className="w-4 h-4" />}
+                                    label={t('ticket_modal.make_template')}
+                                />
                                 <div className="h-1" />
-                                <SideButton icon={<Archive className="w-4 h-4" />} label="Archive" />
+                                <SideButton icon={<Archive className="w-4 h-4" />} label={t('ticket_modal.archive')} />
                             </div>
                         </div>
 
                         {/* Share 버튼 */}
                         <Button className="w-full bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-sm h-9">
                             <Share2 className="w-4 h-4 mr-1.5" />
-                            Share
+                            {t('nav.share')}
                         </Button>
 
                         {/* Watching */}
                         <div className="bg-theme-primary-light rounded-lg p-3 text-center">
                             <div className="flex items-center justify-center gap-1.5 mb-1">
                                 <Eye className="w-4 h-4 text-theme-primary" />
-                                <span className="text-xs font-bold text-theme-primary uppercase">Watching</span>
+                                <span className="text-xs font-bold text-theme-primary uppercase">
+                                    {t('ticket_modal.watching')}
+                                </span>
                             </div>
                             <p className="text-[10px] text-theme-gray-500 mb-2 leading-relaxed">
-                                You will receive notifications for all activity on this card.
+                                {t('ticket_modal.watching_desc')}
                             </p>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 className="text-xs h-7 w-full border-theme-primary text-theme-primary hover:bg-theme-primary hover:text-white"
                             >
-                                Stop Watching
+                                {t('ticket_modal.stop_watching')}
                             </Button>
                         </div>
                     </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,9 @@ interface SignupPageProps {
  * - 약관 동의 체크박스
  * - 소셜 로그인 (Google / GitHub)
  */
-const SignupPage = ({ onLogin }: SignupPageProps) => {
+const SignupPage = () => {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -34,15 +37,15 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
         setError('');
 
         if (!nickname.trim() || !email.trim() || !password.trim()) {
-            setError('모든 필드를 입력해 주세요.');
+            setError(t('auth.fill_all_fields'));
             return;
         }
         if (password !== confirmPassword) {
-            setError('비밀번호가 일치하지 않습니다.');
+            setError(t('auth.passwords_do_not_match'));
             return;
         }
         if (password.length < 8) {
-            setError('비밀번호는 최소 8자 이상이어야 합니다.');
+            setError(t('auth.password_min_length'));
             return;
         }
 
@@ -61,9 +64,10 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                 nickname: nickname, // 가입 시 입력한 정보 활용
             };
 
-            onLogin(token, user);
+            // onLogin(token, user); // Removed as per instruction, assuming navigation will handle post-signup flow
+            navigate('/login'); // Redirect to login after successful signup
         } catch {
-            setError('회원가입에 실패했습니다. 이미 가입된 이메일일 수 있습니다.');
+            setError(t('auth.signup_failed'));
         } finally {
             setIsSubmitting(false);
         }
@@ -85,9 +89,9 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                     <span className="text-lg font-bold text-theme-dark">Trollo</span>
                 </Link>
                 <div className="flex items-center gap-2 text-sm text-theme-gray-500">
-                    Already have an account?{' '}
+                    {t('auth.already_have_account')}{' '}
                     <Link to="/login" className="text-theme-primary font-semibold hover:underline">
-                        Log In
+                        {t('auth.log_in')}
                     </Link>
                 </div>
             </header>
@@ -95,9 +99,19 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
             {/* 메인 콘텐츠 */}
             <div className="flex-1 flex items-center justify-center p-4">
                 <Card className="w-full max-w-md shadow-xl border-0 bg-white">
-                    <CardHeader className="text-center space-y-2 pt-8 pb-2">
-                        <h1 className="text-2xl font-bold text-theme-dark tracking-tight">Trollo Signup</h1>
-                        <p className="text-sm text-theme-gray-500">Create your account to get started</p>
+                    <CardHeader className="text-center space-y-4 pt-10 pb-2">
+                        <div className="w-16 h-16 rounded-2xl bg-theme-primary mx-auto flex items-center justify-center shadow-lg shadow-theme-primary/20">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="7" height="7" rx="1.5" fill="white" />
+                                <rect x="14" y="3" width="7" height="7" rx="1.5" fill="white" />
+                                <rect x="3" y="14" width="7" height="7" rx="1.5" fill="white" />
+                                <rect x="14" y="14" width="4" height="4" rx="1" fill="white" />
+                            </svg>
+                        </div>
+                        <CardTitle className="text-2xl font-bold text-theme-dark">{t('auth.sign_up')}</CardTitle>
+                        <CardDescription className="text-theme-gray-500">
+                            {t('auth.create_account_to_get_started')}
+                        </CardDescription>
                     </CardHeader>
 
                     <CardContent className="px-8 pt-4 pb-2">
@@ -111,15 +125,16 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             {/* Full Name */}
                             <div className="space-y-2">
                                 <Label htmlFor="nickname" className="text-sm font-medium text-theme-dark">
-                                    Full Name
+                                    {t('auth.full_name')}
                                 </Label>
                                 <div className="relative">
                                     <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="nickname"
-                                        placeholder="Enter your full name"
+                                        placeholder={t('auth.enter_full_name')}
                                         value={nickname}
                                         onChange={(e) => setNickname(e.target.value)}
+                                        required
                                         className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
@@ -128,16 +143,17 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             {/* Email */}
                             <div className="space-y-2">
                                 <Label htmlFor="email" className="text-sm font-medium text-theme-dark">
-                                    Email Address
+                                    {t('auth.email_address')}
                                 </Label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="email"
                                         type="email"
-                                        placeholder="e.g. name@email.com"
+                                        placeholder={t('auth.email')}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        required
                                         className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
@@ -146,16 +162,17 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             {/* Password */}
                             <div className="space-y-2">
                                 <Label htmlFor="password" className="text-sm font-medium text-theme-dark">
-                                    Password
+                                    {t('auth.password')}
                                 </Label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="password"
                                         type="password"
-                                        placeholder="Min. 8 characters"
+                                        placeholder={t('auth.password')}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
+                                        required
                                         className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
@@ -164,16 +181,17 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                             {/* Confirm Password */}
                             <div className="space-y-2">
                                 <Label htmlFor="confirmPassword" className="text-sm font-medium text-theme-dark">
-                                    Confirm Password
+                                    {t('auth.confirm_password')}
                                 </Label>
                                 <div className="relative">
                                     <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-500" />
                                     <Input
                                         id="confirmPassword"
                                         type="password"
-                                        placeholder="Repeat your password"
+                                        placeholder={t('auth.repeat_password')}
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required
                                         className="h-12 pl-10 border-theme-gray-300 focus:border-theme-primary"
                                     />
                                 </div>
@@ -187,13 +205,13 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                                     className="w-4 h-4 mt-0.5 rounded border-theme-gray-300 accent-theme-primary"
                                 />
                                 <label htmlFor="terms" className="text-xs text-theme-gray-500 leading-relaxed">
-                                    By signing up, you agree to our{' '}
+                                    {t('auth.terms_agreement_prefix')}{' '}
                                     <span className="text-theme-primary cursor-pointer hover:underline">
-                                        Terms of Service
+                                        {t('auth.terms_of_service')}
                                     </span>{' '}
-                                    and{' '}
+                                    {t('auth.terms_agreement_and')}{' '}
                                     <span className="text-theme-primary cursor-pointer hover:underline">
-                                        Privacy Policy
+                                        {t('auth.privacy_policy')}
                                     </span>
                                     .
                                 </label>
@@ -206,10 +224,10 @@ const SignupPage = ({ onLogin }: SignupPageProps) => {
                                 className="w-full h-12 bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold text-base rounded-lg shadow-md shadow-theme-primary/20 transition-all"
                             >
                                 {isSubmitting ? (
-                                    '가입 중...'
+                                    t('auth.signing_up')
                                 ) : (
                                     <>
-                                        Sign Up
+                                        {t('auth.sign_up')}
                                         <ArrowRight className="w-4 h-4 ml-2" />
                                     </>
                                 )}

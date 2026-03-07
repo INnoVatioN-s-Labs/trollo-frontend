@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,7 @@ interface RecentActivity {
  */
 const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
@@ -179,11 +181,11 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
 
                     <nav className="hidden md:flex items-center gap-4 text-sm font-medium text-theme-gray-500">
                         <button className="text-theme-dark hover:text-theme-primary transition-colors">
-                            Workspaces
+                            {t('nav.workspaces')}
                         </button>
-                        <button className="hover:text-theme-dark transition-colors">Recent</button>
-                        <button className="hover:text-theme-dark transition-colors">Starred</button>
-                        <button className="hover:text-theme-dark transition-colors">Templates</button>
+                        <button className="hover:text-theme-dark transition-colors">{t('nav.recent')}</button>
+                        <button className="hover:text-theme-dark transition-colors">{t('nav.starred')}</button>
+                        <button className="hover:text-theme-dark transition-colors">{t('nav.templates')}</button>
                     </nav>
                 </div>
 
@@ -193,7 +195,7 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-gray-300" />
                         <input
                             type="text"
-                            placeholder="Search workspaces..."
+                            placeholder={t('nav.search')}
                             className="h-9 pl-9 pr-4 w-56 rounded-lg border border-theme-gray-100 bg-theme-gray-100/50 text-sm focus:outline-none focus:border-theme-primary focus:bg-white transition-colors"
                         />
                     </div>
@@ -203,7 +205,7 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                         className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold h-9 px-4"
                         onClick={() => setIsCreateDialogOpen(true)}
                     >
-                        Create
+                        {t('nav.create')}
                     </Button>
 
                     <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-theme-gray-100 transition-colors">
@@ -214,7 +216,7 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                     <button
                         onClick={onLogout}
                         className="w-9 h-9 rounded-full bg-theme-primary flex items-center justify-center text-white text-sm font-bold hover:opacity-90 transition-opacity"
-                        title="로그아웃"
+                        title={t('nav.logout')}
                     >
                         {user?.nickname.charAt(0).toUpperCase() || 'U'}
                     </button>
@@ -224,20 +226,24 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
             <div className="flex-1 flex overflow-hidden">
                 {/* 좌측 사이드바 */}
                 <aside className="w-56 border-r border-theme-gray-100 bg-white p-4 flex flex-col gap-1 shrink-0 hidden lg:flex">
-                    <SidebarItem icon={<LayoutGrid className="w-4.5 h-4.5" />} label="Home" />
-                    <SidebarItem icon={<LayoutGrid className="w-4.5 h-4.5" />} label="Workspaces" active />
-                    <SidebarItem icon={<Clock className="w-4.5 h-4.5" />} label="Recent Boards" />
-                    <SidebarItem icon={<Star className="w-4.5 h-4.5" />} label="Starred" />
+                    <SidebarItem icon={<LayoutGrid className="w-4.5 h-4.5" />} label={t('sidebar.home')} />
+                    <SidebarItem icon={<LayoutGrid className="w-4.5 h-4.5" />} label={t('sidebar.workspaces')} active />
+                    <SidebarItem icon={<Clock className="w-4.5 h-4.5" />} label={t('sidebar.recent_boards')} />
+                    <SidebarItem icon={<Star className="w-4.5 h-4.5" />} label={t('sidebar.starred')} />
                     <div className="mt-4" />
-                    <SidebarItem icon={<Settings className="w-4.5 h-4.5" />} label="Settings" />
+                    <SidebarItem icon={<Settings className="w-4.5 h-4.5" />} label={t('sidebar.settings')} />
 
                     {/* Quick Links */}
                     <div className="mt-auto pt-6 border-t border-theme-gray-100">
                         <p className="text-[10px] uppercase tracking-wider text-theme-gray-300 font-semibold mb-2 px-3">
-                            Quick Links
+                            {t('sidebar.quick_links')}
                         </p>
-                        <SidebarItem icon={<HelpCircle className="w-4 h-4" />} label="Help Center" small />
-                        <SidebarItem icon={<PlayCircle className="w-4 h-4" />} label="Product Tour" small />
+                        <SidebarItem icon={<HelpCircle className="w-4 h-4" />} label={t('sidebar.help_center')} small />
+                        <SidebarItem
+                            icon={<PlayCircle className="w-4 h-4" />}
+                            label={t('sidebar.product_tour')}
+                            small
+                        />
                     </div>
                 </aside>
 
@@ -246,17 +252,15 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                     {/* 제목 + 생성 버튼 */}
                     <div className="flex items-start justify-between mb-6">
                         <div>
-                            <h1 className="text-2xl font-bold text-theme-dark">Your Workspaces</h1>
-                            <p className="text-sm text-theme-gray-500 mt-1">
-                                Manage and collaborate on your team's projects
-                            </p>
+                            <h1 className="text-2xl font-bold text-theme-dark">{t('workspace.title')}</h1>
+                            <p className="text-sm text-theme-gray-500 mt-1">{t('workspace.subtitle')}</p>
                         </div>
                         <Button
                             className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold hidden md:flex"
                             onClick={() => setIsCreateDialogOpen(true)}
                         >
                             <Plus className="w-4 h-4 mr-1.5" />
-                            Create New Workspace
+                            {t('workspace.create_new')}
                         </Button>
                     </div>
 
@@ -272,13 +276,7 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                                         : 'border-transparent text-theme-gray-500 hover:text-theme-dark'
                                 }`}
                             >
-                                {tab === 'all'
-                                    ? 'All Workspaces'
-                                    : tab === 'owned'
-                                      ? 'Owned by me'
-                                      : tab === 'shared'
-                                        ? 'Shared with me'
-                                        : 'Archived'}
+                                {t(`workspace.tabs.${tab}` as const)}
                             </button>
                         ))}
                     </div>
@@ -333,10 +331,12 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-1 text-xs text-theme-gray-500">
                                             <Users className="w-3.5 h-3.5" />
-                                            <span>{ws.memberCount} members</span>
+                                            <span>
+                                                {ws.memberCount} {t('workspace.members')}
+                                            </span>
                                         </div>
                                         <button className="text-xs font-bold text-theme-primary hover:underline uppercase tracking-wide flex items-center gap-1 group-hover:gap-2 transition-all">
-                                            Open Board
+                                            {t('workspace.open_board')}
                                             <ArrowRight className="w-3.5 h-3.5" />
                                         </button>
                                     </div>
@@ -353,15 +353,17 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                                 <div className="w-14 h-14 rounded-full bg-theme-gray-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-theme-primary-light">
                                     <Plus className="w-6 h-6 text-theme-gray-500" />
                                 </div>
-                                <h3 className="font-semibold text-theme-dark text-base mb-1">New Workspace</h3>
-                                <p className="text-xs text-theme-gray-500">Start a fresh collaborative space</p>
+                                <h3 className="font-semibold text-theme-dark text-base mb-1">
+                                    {t('workspace.new_workspace')}
+                                </h3>
+                                <p className="text-xs text-theme-gray-500">{t('workspace.start_fresh')}</p>
                             </div>
                         </Card>
                     </div>
 
                     {/* 최근 활동 */}
                     <div>
-                        <h2 className="text-lg font-bold text-theme-dark mb-4">Recent Activity</h2>
+                        <h2 className="text-lg font-bold text-theme-dark mb-4">{t('workspace.recent_activity')}</h2>
                         <div className="space-y-1">
                             {recentActivities.map((activity) => (
                                 <div
@@ -384,12 +386,12 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-theme-dark">새 워크스페이스 만들기</DialogTitle>
-                        <DialogDescription>팀 프로젝트를 위한 새 워크스페이스를 생성합니다.</DialogDescription>
+                        <DialogTitle className="text-theme-dark">{t('workspace.modal_title')}</DialogTitle>
+                        <DialogDescription>{t('workspace.modal_desc')}</DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <Input
-                            placeholder="워크스페이스 이름"
+                            placeholder={t('workspace.name_placeholder')}
                             value={newWorkspaceName}
                             onChange={(e) => setNewWorkspaceName(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleCreateWorkspace()}
@@ -397,7 +399,7 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                             className="border-theme-gray-300 focus:border-theme-primary"
                         />
                         <Input
-                            placeholder="설명 (선택사항)"
+                            placeholder={t('workspace.desc_placeholder')}
                             value={newWorkspaceDesc}
                             onChange={(e) => setNewWorkspaceDesc(e.target.value)}
                             className="border-theme-gray-300 focus:border-theme-primary"
@@ -405,14 +407,14 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                            취소
+                            {t('workspace.cancel')}
                         </Button>
                         <Button
                             onClick={handleCreateWorkspace}
                             disabled={!newWorkspaceName.trim()}
                             className="bg-theme-primary hover:bg-theme-primary/90 text-white"
                         >
-                            생성
+                            {t('workspace.create')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
