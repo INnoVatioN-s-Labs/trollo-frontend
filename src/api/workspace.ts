@@ -1,4 +1,14 @@
-import type { KanbanView, ReturnMessage, Workspace, WorkspaceRequest } from '@/types';
+import type {
+    ActivityLogResponse,
+    JoinWorkspaceRequest,
+    JoinWorkspaceResponse,
+    KanbanView,
+    ReturnMessage,
+    TransferHostRequest,
+    TransferHostResponse,
+    Workspace,
+    WorkspaceRequest,
+} from '@/types';
 import apiClient from './client';
 
 /** 워크스페이스 목록 조회 */
@@ -28,4 +38,30 @@ export const getWorkspaceById = async (workspaceId: number): Promise<Workspace> 
 /** 워크스페이스 삭제 */
 export const deleteWorkspace = async (workspaceId: number): Promise<void> => {
     await apiClient.delete(`/workspaces/${workspaceId}`);
+};
+
+/** 최근 활동 조회 */
+export const getRecentActivities = async (workspaceId: number): Promise<ActivityLogResponse[]> => {
+    const response = await apiClient.get<ReturnMessage<ActivityLogResponse[]>>(`/workspaces/${workspaceId}/activities`);
+    return response.data.data;
+};
+
+/** 워크스페이스 참여 */
+export const joinWorkspace = async (data: JoinWorkspaceRequest): Promise<JoinWorkspaceResponse> => {
+    const response = await apiClient.post<ReturnMessage<JoinWorkspaceResponse>>('/workspaces/join', data);
+    return response.data.data;
+};
+
+/** 멤버 강퇴 */
+export const removeMember = async (workspaceId: number, userId: number): Promise<void> => {
+    await apiClient.delete(`/workspaces/${workspaceId}/members/${userId}`);
+};
+
+/** 호스트 양도 */
+export const transferHost = async (workspaceId: number, data: TransferHostRequest): Promise<TransferHostResponse> => {
+    const response = await apiClient.patch<ReturnMessage<TransferHostResponse>>(
+        `/workspaces/${workspaceId}/transfer-host`,
+        data
+    );
+    return response.data.data;
 };

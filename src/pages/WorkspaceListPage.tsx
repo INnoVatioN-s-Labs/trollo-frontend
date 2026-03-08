@@ -12,8 +12,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { getWorkspaces, createWorkspace, deleteWorkspace } from '@/api/workspace';
-import type { User, Workspace } from '@/types';
+import { getWorkspaces, createWorkspace, deleteWorkspace, joinWorkspace, getRecentActivities } from '@/api/workspace';
+import type { User, Workspace, ActivityLogResponse } from '@/types';
 import {
     Search,
     Plus,
@@ -30,6 +30,7 @@ import {
     UserPlus,
     CheckCircle,
     Trash2,
+    KeySquare,
 } from 'lucide-react';
 
 interface WorkspaceListPageProps {
@@ -37,9 +38,9 @@ interface WorkspaceListPageProps {
     onLogout: () => void;
 }
 
-/** 최근 활동 Mock 타입 */
+/** 화면에 표시할 활동 이력(UI 용 래퍼) */
 interface RecentActivity {
-    id: number;
+    id: string; // 고유하게 만들기 위해 string (wsId_activityId)
     icon: 'edit' | 'user' | 'archive';
     text: string;
     subText: string;
@@ -60,48 +61,74 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
 
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
+    const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
+
     // 컴포넌트 마운트 시 워크스페이스 목록 조회
     useEffect(() => {
         fetchWorkspaces();
     }, []);
 
+    const timeAgo = (dateString: string) => {
+        const now = new Date();
+        const past = new Date(dateString);
+        const diffMs = now.getTime() - past.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffMins < 1) return '방금 전';
+        if (diffMins < 60) return `${diffMins}분 전`;
+        if (diffHours < 24) return `${diffHours}시간 전`;
+        return `${diffDays}일 전`;
+    };
+
+    const getActivityIconType = (type: string): 'edit' | 'user' | 'archive' => {
+        if (type.includes('MEMBER') || type.includes('HOST')) return 'user';
+        if (type.includes('DELETE') || type.includes('ARCHIVE')) return 'archive';
+        return 'edit';
+    };
+
     const fetchWorkspaces = async () => {
         try {
             const data = await getWorkspaces();
             setWorkspaces(data);
+
+            // 각 워크스페이스의 활동 이력을 병렬로 가져옵니다. (백엔드에 전체 이력 조회 API가 없으므로 프론트에서 agg)
+            const activitiesPromises = data.map(async (ws) => {
+                const logs = await getRecentActivities(ws.id);
+                return logs.map((log) => ({
+                    ...log,
+                    workspaceName: ws.name,
+                }));
+            });
+            const activitiesResults = await Promise.all(activitiesPromises);
+
+            // 하나로 합치고 최신순 정렬 후 최대 10개 추출
+            const allActivities = activitiesResults
+                .flat()
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                .slice(0, 10);
+
+            // UI 타입으로 매핑
+            const formattedActivities: RecentActivity[] = allActivities.map((act) => ({
+                id: `${act.workspaceName}_${act.id}`,
+                icon: getActivityIconType(act.type),
+                text: act.content,
+                subText: `${act.workspaceName} · ${act.userNickname}`,
+                timestamp: timeAgo(act.createdAt),
+            }));
+
+            setRecentActivities(formattedActivities);
         } catch (error) {
-            console.error('Failed to fetch workspaces:', error);
+            console.error('Failed to fetch workspaces and activities:', error);
         }
     };
 
-    // Mock 최근 활동
-    const recentActivities: RecentActivity[] = [
-        {
-            id: 1,
-            icon: 'edit',
-            text: '"Sprint Backlog" 카드를 수정했습니다',
-            subText: 'Development Board · 2시간 전',
-            timestamp: '2h',
-        },
-        {
-            id: 2,
-            icon: 'user',
-            text: 'Sarah Miller님이 워크스페이스에 참여했습니다',
-            subText: 'Marketing Team · 5시간 전',
-            timestamp: '5h',
-        },
-        {
-            id: 3,
-            icon: 'archive',
-            text: '"Q3 Retrospective" 보드가 보관되었습니다',
-            subText: 'Personal Projects · 어제',
-            timestamp: '1d',
-        },
-    ];
-
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+    const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
     const [newWorkspaceName, setNewWorkspaceName] = useState('');
     const [newWorkspaceDesc, setNewWorkspaceDesc] = useState('');
+    const [inviteCodeInput, setInviteCodeInput] = useState('');
     const [activeTab, setActiveTab] = useState<'all' | 'owned' | 'shared' | 'archived'>('all');
 
     const handleOpenWorkspace = (workspaceId: number) => {
@@ -138,6 +165,20 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
         } catch (error) {
             console.error('Failed to delete workspace:', error);
             alert('워크스페이스 삭제 기능 중 오류가 발생했습니다.');
+        }
+    };
+
+    const handleJoinWorkspace = async () => {
+        if (!inviteCodeInput.trim()) return;
+
+        try {
+            await joinWorkspace({ inviteCode: inviteCodeInput.trim() });
+            await fetchWorkspaces(); // 참여 후 목록 갱신
+            setIsJoinDialogOpen(false);
+            setInviteCodeInput('');
+        } catch (error: any) {
+            console.error('Failed to join workspace:', error);
+            alert(error?.response?.data?.message || '워크스페이스 참여에 실패했습니다.');
         }
     };
 
@@ -270,13 +311,22 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                             <h1 className="text-2xl font-bold text-theme-dark">{t('workspace.title')}</h1>
                             <p className="text-sm text-theme-gray-500 mt-1">{t('workspace.subtitle')}</p>
                         </div>
-                        <Button
-                            className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold hidden md:flex"
-                            onClick={() => setIsCreateDialogOpen(true)}
-                        >
-                            <Plus className="w-4 h-4 mr-1.5" />
-                            {t('workspace.create_new')}
-                        </Button>
+                        <div className="hidden md:flex gap-2">
+                            <Button
+                                className="bg-white border border-theme-gray-300 text-theme-dark hover:bg-theme-gray-100 font-semibold"
+                                onClick={() => setIsJoinDialogOpen(true)}
+                            >
+                                <KeySquare className="w-4 h-4 mr-1.5 text-theme-gray-500" />
+                                {t('workspace.join_workspace')}
+                            </Button>
+                            <Button
+                                className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold flex"
+                                onClick={() => setIsCreateDialogOpen(true)}
+                            >
+                                <Plus className="w-4 h-4 mr-1.5" />
+                                {t('workspace.create_new')}
+                            </Button>
+                        </div>
                     </div>
 
                     {/* 탭 필터 */}
@@ -349,9 +399,23 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                                             <Trash2 className="w-4 h-4" />
                                         </button>
                                     </div>
-                                    <p className="text-xs text-theme-gray-500 line-clamp-2 mb-4 leading-relaxed mt-1">
+                                    <p className="text-xs text-theme-gray-500 line-clamp-2 mb-2 leading-relaxed mt-1 h-8">
                                         {ws.description}
                                     </p>
+
+                                    {ws.inviteCode && (
+                                        <div
+                                            className="text-[10px] font-mono bg-theme-gray-100/50 hover:bg-theme-gray-100 text-theme-gray-500 py-1 px-2 rounded mb-3 inline-block font-medium w-fit transition-colors"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigator.clipboard.writeText(ws.inviteCode!);
+                                                alert(`초대 코드(${ws.inviteCode})가 클립보드에 복사되었습니다.`);
+                                            }}
+                                            title="초대 코드 복사하기"
+                                        >
+                                            Code: <span className="text-theme-dark">{ws.inviteCode}</span>
+                                        </div>
+                                    )}
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-1 text-xs text-theme-gray-500">
@@ -375,13 +439,29 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                             onClick={() => setIsCreateDialogOpen(true)}
                         >
                             <div className="text-center py-8">
-                                <div className="w-14 h-14 rounded-full bg-theme-gray-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-theme-primary-light">
-                                    <Plus className="w-6 h-6 text-theme-gray-500" />
+                                <div className="w-14 h-14 rounded-full bg-theme-gray-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-theme-primary-light transition-colors">
+                                    <Plus className="w-6 h-6 text-theme-gray-500 group-hover:text-theme-primary transition-colors" />
                                 </div>
                                 <h3 className="font-semibold text-theme-dark text-base mb-1">
                                     {t('workspace.new_workspace')}
                                 </h3>
                                 <p className="text-xs text-theme-gray-500">{t('workspace.start_fresh')}</p>
+                            </div>
+                        </Card>
+
+                        {/* 워크스페이스 참여 카드 */}
+                        <Card
+                            className="border-2 border-dashed border-theme-gray-300 hover:border-theme-primary/50 hover:bg-theme-primary-light/30 transition-all cursor-pointer flex items-center justify-center min-h-[280px]"
+                            onClick={() => setIsJoinDialogOpen(true)}
+                        >
+                            <div className="text-center py-8">
+                                <div className="w-14 h-14 rounded-full bg-theme-gray-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-theme-primary-light transition-colors">
+                                    <KeySquare className="w-6 h-6 text-theme-gray-500 group-hover:text-theme-primary transition-colors" />
+                                </div>
+                                <h3 className="font-semibold text-theme-dark text-base mb-1">
+                                    {t('workspace.join_workspace')}
+                                </h3>
+                                <p className="text-xs text-theme-gray-500">{t('workspace.join_workspace_title')}</p>
                             </div>
                         </Card>
                     </div>
@@ -390,18 +470,29 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                     <div>
                         <h2 className="text-lg font-bold text-theme-dark mb-4">{t('workspace.recent_activity')}</h2>
                         <div className="space-y-1">
-                            {recentActivities.map((activity) => (
-                                <div
-                                    key={activity.id}
-                                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-theme-gray-100/50 transition-colors"
-                                >
-                                    {getActivityIcon(activity.icon)}
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm text-theme-dark">{activity.text}</p>
-                                        <p className="text-xs text-theme-gray-500">{activity.subText}</p>
+                            {recentActivities.length > 0 ? (
+                                recentActivities.map((activity) => (
+                                    <div
+                                        key={activity.id}
+                                        className="flex items-center gap-4 p-3 rounded-xl hover:bg-theme-gray-100/50 transition-colors"
+                                    >
+                                        {getActivityIcon(activity.icon)}
+                                        <div className="flex-1 min-w-0 flex justify-between items-center">
+                                            <div>
+                                                <p className="text-sm text-theme-dark">{activity.text}</p>
+                                                <p className="text-xs text-theme-gray-500">{activity.subText}</p>
+                                            </div>
+                                            <span className="text-[10px] text-theme-gray-400 font-medium bg-theme-gray-100/50 px-2 py-1 rounded">
+                                                {activity.timestamp}
+                                            </span>
+                                        </div>
                                     </div>
+                                ))
+                            ) : (
+                                <div className="text-sm text-theme-gray-400 py-4 text-center bg-theme-gray-50/50 rounded-xl">
+                                    최근 활동이 없습니다.
                                 </div>
-                            ))}
+                            )}
                         </div>
                     </div>
                 </main>
@@ -440,6 +531,39 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
                             className="bg-theme-primary hover:bg-theme-primary/90 text-white"
                         >
                             {t('workspace.create')}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* 워크스페이스 참여 다이얼로그 */}
+            <Dialog open={isJoinDialogOpen} onOpenChange={setIsJoinDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="text-theme-dark">{t('workspace.join_workspace_title')}</DialogTitle>
+                        <DialogDescription>{t('workspace.join_workspace_desc')}</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        <Input
+                            placeholder={t('workspace.invite_code_placeholder')}
+                            value={inviteCodeInput}
+                            onChange={(e) => setInviteCodeInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleJoinWorkspace()}
+                            autoFocus
+                            className="border-theme-gray-300 focus:border-theme-primary uppercase text-center font-mono tracking-widest text-lg"
+                            maxLength={8}
+                        />
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsJoinDialogOpen(false)}>
+                            {t('workspace.cancel')}
+                        </Button>
+                        <Button
+                            onClick={handleJoinWorkspace}
+                            disabled={!inviteCodeInput.trim() || inviteCodeInput.length < 8}
+                            className="bg-theme-primary hover:bg-theme-primary/90 text-white"
+                        >
+                            {t('workspace.join')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

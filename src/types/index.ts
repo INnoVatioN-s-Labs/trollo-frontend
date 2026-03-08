@@ -38,12 +38,48 @@ export interface Workspace {
     id: number;
     name: string;
     description?: string;
+    inviteCode?: string;
     coverColor?: string; // 커버 배경색 (hex)
     iconEmoji?: string; // 아이콘 이모지
     memberCount?: number; // 멤버 수
     members?: WorkspaceMember[];
     createdAt: string;
     updatedAt: string;
+}
+
+/** 워크스페이스 참여 요청 */
+export interface JoinWorkspaceRequest {
+    inviteCode: string;
+}
+
+/** 워크스페이스 참여 응답 */
+export interface JoinWorkspaceResponse {
+    workspaceId: number;
+    workspaceName: string;
+    role: string;
+    joinedAt: string;
+}
+
+/** 워크스페이스 호스트 양도 요청 */
+export interface TransferHostRequest {
+    targetUserId: number;
+}
+
+/** 워크스페이스 호스트 양도 응답 */
+export interface TransferHostResponse {
+    workspaceId: number;
+    previousHostUserId: number;
+    newHostUserId: number;
+}
+
+/** 활동 이력 조회 응답 */
+export interface ActivityLogResponse {
+    id: number;
+    type: string;
+    content: string;
+    userId: number;
+    userNickname: string;
+    createdAt: string;
 }
 
 /** 워크스페이스 멤버 */

@@ -48,7 +48,12 @@
         "cancel": "취소",
         "create": "생성",
         "delete_tooltip": "워크스페이스 삭제",
-        "delete_confirm": "정말 이 워크스페이스를 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다!)"
+        "delete_confirm": "정말 이 워크스페이스를 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다!)",
+        "join_workspace": "코드로 참여",
+        "join_workspace_title": "워크스페이스 참여하기",
+        "join_workspace_desc": "전달받은 8자리 초대 코드를 입력하여 워크스페이스에 참여합니다.",
+        "invite_code_placeholder": "예: AB12CD34",
+        "join": "참여하기"
     },
     "kanban": {
         "add_list": "리스트 추가",
