@@ -19,6 +19,7 @@ Trollo 애플리케이션의 클라이언트(프론트엔드) 저장소입니다
 - **라우팅 (Routing)**: React Router Dom v7
 - **HTTP/API 통신**: Axios (요청/응답 인터셉터 기반 권한 처리)
 - **국제화 (i18n)**: i18next & react-i18next (클라이언트 브라우저 언어 자동 감지)
+- **배포 (Deployment)**: Vercel (CI/CD 연동)
 
 ## 🎨 디자인 시스템 규칙
 
@@ -38,6 +39,20 @@ src/
 └── types/          # TypeScript 글로벌 타입 및 인터페이스 명세서
 ```
 
+## 💻 환경 변수 설정 (Environment Variables)
+
+API 연동을 위해 `.env` 파일 설정을 사용합니다. `.env.example`을 참고하여 로컬과 운영 환경의 API BASE URL을 설정할 수 있습니다.
+저장소에는 보안을 위해 실제 `.env` 파일(e.g., `.env.local`, `.env.prod`)은 올라가지 않고 Gitignore 처리되어 있습니다.
+
+- **`.env.local` (로컬 개발용)**
+    ```env
+    VITE_API_BASE_URL=http://localhost:8080/api
+    ```
+- **`.env.prod` (운영 및 Vercel 배포용)**
+    ```env
+    VITE_API_BASE_URL=https://api.yourdomain.com/api
+    ```
+
 ## 💻 빌드 및 실행 방법 (Getting Started)
 
 ### 1. 요구 사항
@@ -54,7 +69,7 @@ npm install
 
 ### 3. 개발 서버 실행
 
-자동 리로드(HMR) 기능이 포함된 로컬 개발 서버를 띄웁니다.
+로컬 데이터베이스와 백엔드 서버(Spring Boot)를 함께 실행하고 진행해야 정상적인 작동이 가능합니다.
 
 ```bash
 npm run dev
@@ -75,9 +90,22 @@ npm run lint
 npm run preview
 ```
 
-## 🌐 API 연동 설정 알아보기
+## ☁️ 배포 (Deployment)
 
-`vite.config.ts`에 정의된 개발 서버 Proxy 설정을 통해 프론트엔드의 `/api` 요청이 로컬 백엔드 서버(`http://localhost:8080`)로 우회됩니다. 이는 개발 시 CORS 문제를 원천 차단해 줍니다. 백엔드(Spring Boot)를 함께 동작시켜야 정상적인 회원가입, 로그인 및 티켓 조회가 가능합니다.
+프론트엔드 프로젝트는 **Vercel**을 통해 배포되고 관리됩니다.
+
+### Vercel 환경 변수 설정
+
+Vercel 대시보드에서 프로젝트 설정 탭(Project Settings -> Environment Variables)으로 이동하여, 다음 변수를 필수로 등록해야 합니다.
+
+- **Key**: `VITE_API_BASE_URL`
+- **Value**: `https://api.yourdomain.com/api`
+
+> 💡 **Mixed Content 구조적 해결**
+>
+> Vercel에 배포된 애플리케이션은 기본적으로 안전한 `HTTPS` 환경에서 동작합니다. 브라우저 보안 정책 상, 이 환경에서 백엔드의 불안전한 `HTTP` API를 호출하면 통신이 강제 차단되는 **Mixed Content Block** 현상이 발생합니다.
+>
+> 이를 근본적으로 해결하기 위해, 로컬 프론트엔드 프록시 기능에 의존하던 기존의 우회 방식을 폐기하고 프론트엔드 코드는 그대로 두는 대신 서비스(클라우드 인스턴스)에 **Nginx 리버스 프록시와 Let's Encrypt를 통해 무료 SSL(HTTPS)** 인증서를 적용했습니다. 결과적으로 `https://api.yourdomain.com` 을 통해서 백엔드 역시 안전한 HTTPS 통신이 가능해져 운영 환경의 연결성이 보장되었습니다.
 
 ## 🌍 다국어 적용 (i18n)
 
