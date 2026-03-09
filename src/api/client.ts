@@ -6,7 +6,7 @@ import axios from 'axios';
  * - 인터셉터(Interceptor)로 JWT 토큰 자동 첨부
  */
 const apiClient = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
     headers: {
         'Content-Type': 'application/json',
     },

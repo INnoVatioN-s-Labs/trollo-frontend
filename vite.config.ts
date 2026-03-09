@@ -13,12 +13,5 @@ export default defineConfig({
     },
     server: {
         port: 5173,
-        proxy: {
-            // 백엔드 API 프록시 설정
-            '/api': {
-                target: 'http://localhost:8080',
-                changeOrigin: true,
-            },
-        },
     },
 });
