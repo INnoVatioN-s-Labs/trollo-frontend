@@ -139,6 +139,7 @@
         "enter_full_name": "이름을 입력하세요",
         "confirm_password": "비밀번호 확인",
         "repeat_password": "비밀번호를 다시 입력하세요",
+        "terms_required": "이용약관에 동의해주세요.",
         "terms_agreement_prefix": "가입 시",
         "terms_of_service": "이용약관",
         "terms_agreement_and": "및",

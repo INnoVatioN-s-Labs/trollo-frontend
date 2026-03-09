@@ -139,6 +139,7 @@
         "enter_full_name": "Enter your full name",
         "confirm_password": "Confirm Password",
         "repeat_password": "Repeat your password",
+        "terms_required": "You must agree to the Terms of Service.",
         "terms_agreement_prefix": "By signing up, you agree to our",
         "terms_of_service": "Terms of Service",
         "terms_agreement_and": "and",

@@ -25,6 +25,7 @@ const SignupPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,6 +41,10 @@ const SignupPage = () => {
         }
         if (password.length < 8) {
             setError(t('auth.password_min_length'));
+            return;
+        }
+        if (!agreedToTerms) {
+            setError(t('auth.terms_required'));
             return;
         }
 
@@ -184,6 +189,8 @@ const SignupPage = () => {
                                 <input
                                     type="checkbox"
                                     id="terms"
+                                    checked={agreedToTerms}
+                                    onChange={(e) => setAgreedToTerms(e.target.checked)}
                                     className="w-4 h-4 mt-0.5 rounded border-theme-gray-300 accent-theme-primary"
                                 />
                                 <label htmlFor="terms" className="text-xs text-theme-gray-500 leading-relaxed">
