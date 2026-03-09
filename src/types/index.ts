@@ -80,6 +80,8 @@ export interface ActivityLogResponse {
     userId: number;
     userNickname: string;
     createdAt: string;
+    workspaceId: number;
+    workspaceName: string;
 }
 
 /** 워크스페이스 멤버 */
