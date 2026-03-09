@@ -1,0 +1,25 @@
+@theme inline {
+    /* Sunset & Ink 테마 브랜드 색상 */
+    --color-theme-primary: #e85d04; /* cayenne_red-500: 메인 버튼 및 강조 */
+    --color-theme-primary-light: #feddc9; /* cayenne_red-900: 부드러운 호버 표면 */
+    --color-theme-dark: #1f0001; /* oxblood-100: 네비게이션 바, 굵은 텍스트 */
+    --color-theme-dark-light: #57030b; /* black_cherry-400: 본문 서브 텍스트 */
+
+    /* 웜톤 그레이 스케일 (가독성 높은 뉴트럴 톤) */
+    --color-theme-gray-500: #85706e; /* 텍스트, 플레이스홀더, 비어있는 화면 아이콘 */
+    --color-theme-gray-300: #dcd4d4; /* 보더 라인 */
+    --color-theme-gray-100: #f8f6f6; /* 환한 오프화이트 베이스 (카드 및 컬럼 배경) */
+
+    /* 칸반 티켓 라벨 색상 */
+    --color-label-blue: #5068ee; /* ink_black */
+    --color-label-green: #68c991;
+    --color-label-orange: #faa307; /* orange */
+    --color-label-red: #d00000; /* brick_ember */
+    --color-label-purple: #880f39; /* night_bordeaux */
+    --color-label-yellow: #ffba08; /* amber_flame */
+
+    /* 메인 보드 배경 그래디언트 색상 (Sunset 느낌 3단 연결) */
+    --color-board-bg-from: #6a040f; /* black_cherry-500 */
+    --color-board-bg-via: #dc2f02; /* red_ochre-500 */
+    --color-board-bg-to: #faa307; /* orange-500 */
+}
