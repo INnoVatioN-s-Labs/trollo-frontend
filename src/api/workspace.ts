@@ -40,9 +40,15 @@ export const deleteWorkspace = async (workspaceId: number): Promise<void> => {
     await apiClient.delete(`/workspaces/${workspaceId}`);
 };
 
-/** 최근 활동 조회 */
+/** 단일 워크스페이스의 최근 활동 조회 */
 export const getRecentActivities = async (workspaceId: number): Promise<ActivityLogResponse[]> => {
     const response = await apiClient.get<ReturnMessage<ActivityLogResponse[]>>(`/workspaces/${workspaceId}/activities`);
+    return response.data.data;
+};
+
+/** 내 워크스페이스들의 통합 최근 활동 조회 */
+export const getMyActivities = async (): Promise<ActivityLogResponse[]> => {
+    const response = await apiClient.get<ReturnMessage<ActivityLogResponse[]>>('/workspaces/activities');
     return response.data.data;
 };
 

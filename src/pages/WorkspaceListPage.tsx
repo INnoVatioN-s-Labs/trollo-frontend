@@ -12,7 +12,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { getWorkspaces, createWorkspace, deleteWorkspace, joinWorkspace, getRecentActivities } from '@/api/workspace';
+import { getWorkspaces, createWorkspace, deleteWorkspace, joinWorkspace, getMyActivities } from '@/api/workspace';
 import type { User, Workspace, ActivityLogResponse } from '@/types';
 import {
     Search,
@@ -93,25 +93,12 @@ const WorkspaceListPage = ({ user, onLogout }: WorkspaceListPageProps) => {
             const data = await getWorkspaces();
             setWorkspaces(data);
 
-            // 각 워크스페이스의 활동 이력을 병렬로 가져옵니다. (백엔드에 전체 이력 조회 API가 없으므로 프론트에서 agg)
-            const activitiesPromises = data.map(async (ws) => {
-                const logs = await getRecentActivities(ws.id);
-                return logs.map((log) => ({
-                    ...log,
-                    workspaceName: ws.name,
-                }));
-            });
-            const activitiesResults = await Promise.all(activitiesPromises);
-
-            // 하나로 합치고 최신순 정렬 후 최대 10개 추출
-            const allActivities = activitiesResults
-                .flat()
-                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                .slice(0, 10);
+            // 통합 API를 통해 내가 속한 모든 워크스페이스의 활동 이력을 한번에 가져옵니다.
+            const allActivities = await getMyActivities();
 
             // UI 타입으로 매핑
             const formattedActivities: RecentActivity[] = allActivities.map((act) => ({
-                id: `${act.workspaceName}_${act.id}`,
+                id: `${act.workspaceId}_${act.id}`,
                 icon: getActivityIconType(act.type),
                 text: act.content,
                 subText: `${act.workspaceName} · ${act.userNickname}`,
