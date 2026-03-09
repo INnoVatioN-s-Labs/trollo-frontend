@@ -13,7 +13,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { getWorkspaces, createWorkspace, deleteWorkspace, joinWorkspace, getMyActivities } from '@/api/workspace';
-import type { User, Workspace, ActivityLogResponse } from '@/types';
+import type { User, Workspace } from '@/types';
 import {
     Search,
     Plus,

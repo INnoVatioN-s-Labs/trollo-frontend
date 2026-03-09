@@ -39,10 +39,7 @@ const App = () => {
                         path="/login"
                         element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage onLogin={saveAuth} />}
                     />
-                    <Route
-                        path="/signup"
-                        element={isAuthenticated ? <Navigate to="/" replace /> : <SignupPage onLogin={saveAuth} />}
-                    />
+                    <Route path="/signup" element={isAuthenticated ? <Navigate to="/" replace /> : <SignupPage />} />
 
                     {/* 워크스페이스 목록 (메인 페이지, 인증 필요) */}
                     <Route

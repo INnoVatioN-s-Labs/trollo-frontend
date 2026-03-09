@@ -6,14 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import type { User } from '@/types';
 import { signup } from '@/api/auth';
-import { parseJwt } from '@/lib/utils';
 import { User as UserIcon, Mail, Lock, ShieldCheck, ArrowRight, Github } from 'lucide-react';
-
-interface SignupPageProps {
-    onLogin: (token: string, user: User) => void;
-}
 
 /**
  * 회원가입 페이지 (디자인 시안: trollo_signup_updated)
@@ -51,20 +45,8 @@ const SignupPage = () => {
 
         setIsSubmitting(true);
         try {
-            const res = await signup({ email, password, nickname });
-            const token = res.accessToken;
-
-            // 토큰을 디코드하거나, 새로 가입한 정보를 바탕으로 User 생성
-            const decoded = parseJwt(token);
-            const userEmail = decoded?.sub ?? email;
-
-            const user: User = {
-                id: Date.now(),
-                email: userEmail,
-                nickname: nickname, // 가입 시 입력한 정보 활용
-            };
-
-            // onLogin(token, user); // Removed as per instruction, assuming navigation will handle post-signup flow
+            await signup({ email, password, nickname });
+            // Removed as per instruction, assuming navigation will handle post-signup flow
             navigate('/login'); // Redirect to login after successful signup
         } catch {
             setError(t('auth.signup_failed'));
